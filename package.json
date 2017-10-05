@@ -1,0 +1,35 @@
+{
+  "name": "get-powershell",
+  "version": "0.0.1",
+  "description": "Automatically downloads and extracts powershell, allowing you to use it in NPM scripts and node projects even with Linux and Mac developers who don't know or care about installing it.",
+  "scripts": {
+    "postinstall": "out/npm_lifecycle_postinstall.js",
+    "compile": "tsc -p ."
+  },
+  "author": "Andrew Bradley <cspotcode@gmail.com>",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cspotcode/npm-get-powershell.git"
+  },
+  "homepage": "https://github.com/cspotcode/npm-get-powershell",
+  "bugs": {
+    "url": "https://github.com/cspotcode/npm-get-powershell/issues"
+  },
+  "dependencies": {
+    "get-stream": "^3.0.0",
+    "mkdirp": "^0.5.1",
+    "request": "^2.83.0"
+  },
+  "devDependencies": {
+    "@types/mkdirp": "^0.5.1",
+    "@types/node": "^8.0.32",
+    "@types/request": "^2.0.4",
+    "ts-node": "^3.3.0",
+    "typescript": "^2.5.3"
+  },
+  "files": [
+    "out",
+    "package.json"
+  ]
+}

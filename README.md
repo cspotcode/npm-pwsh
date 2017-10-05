@@ -1,4 +1,4 @@
-# get-powershell
+# get-powershell (beta)
 
 Installs powershell into an internal cache and exposes it to your npm scripts.
 

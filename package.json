@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "Automatically downloads and extracts powershell, allowing you to use it in NPM scripts and node projects even with Linux and Mac developers who don't know or care about installing it.",
   "scripts": {
-    "postinstall": "out/npm_lifecycle_postinstall.js",
+    "postinstall": "node ./out/npm_lifecycle_postinstall.js",
     "compile": "tsc -p ."
   },
   "author": "Andrew Bradley <cspotcode@gmail.com>",
@@ -19,7 +19,8 @@
   "dependencies": {
     "get-stream": "^3.0.0",
     "mkdirp": "^0.5.1",
-    "request": "^2.83.0"
+    "request": "^2.83.0",
+    "tslib": "^1.7.1"
   },
   "devDependencies": {
     "@types/mkdirp": "^0.5.1",

@@ -23,3 +23,17 @@ If you want powershell to be globally available in general:
 ```
 npm install --global get-powershell
 ```
+
+## Example
+
+```json
+// Example package.json
+{
+    "devDependencies": {
+        "get-powershell": "0.0.3" // ... or the latest version
+    },
+    "scripts": {
+        "test": "powershell -File ./scripts/test.ps1"
+    }
+}
+```

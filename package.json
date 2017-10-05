@@ -1,6 +1,6 @@
 {
   "name": "get-powershell",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Automatically downloads and extracts powershell, allowing you to use it in NPM scripts and node projects even with Linux and Mac developers who don't know or care about installing it.",
   "scripts": {
     "postinstall": "node ./out/npm_lifecycle_postinstall.js",

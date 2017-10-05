@@ -48,7 +48,7 @@ async function main() {
     }
     if(foundPath) {
         log('Found powershell on PATH; no action required.');
-        // process.exit(0);
+        process.exit(0);
     }
 
     // TODO add support for Mac

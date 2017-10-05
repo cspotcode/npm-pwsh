@@ -1,5 +1,7 @@
 # get-powershell (beta)
 
+*Note: currently missing Mac support because I don't have a Mac to test on.*
+
 Installs powershell into an internal cache and exposes it to your npm scripts.
 
 Alternatively, install it globally for a super-simple powershell installation.

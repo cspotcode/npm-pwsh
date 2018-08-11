@@ -15,7 +15,10 @@ const config: webpack.Configuration = {
     devtool: 'source-map',
 
     plugins: [
-        new webpack.BannerPlugin({ banner: "#!/usr/bin/env node", raw: true })
+        new webpack.BannerPlugin({ banner: "#!/usr/bin/env node", raw: true }),
+        new webpack.DefinePlugin({
+            '__WEBPACK_DIRNAME__': '__dirname',
+        }),
     ],
     
     module: {

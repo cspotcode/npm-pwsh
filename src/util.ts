@@ -17,6 +17,11 @@ import {spawnSync} from 'child_process';
 
 export type TODO = any;
 
+declare global {
+    const __WEBPACK_DIRNAME__: string;
+}
+export const __root = Path.join(typeof __WEBPACK_DIRNAME__ === 'undefined' ? __dirname : __WEBPACK_DIRNAME__, '..');
+
 /** return the sha256 of a file as a hex-formatted string */
 export async function sha256OfFile(path: string): Promise<string> {
     const input = fs.createReadStream(path);
@@ -155,10 +160,10 @@ export function getNpmBinDirectory() {
     // Local installation: find the local node_modules/.bin
     else {
         if(process.env.npm_lifecycle_event) {
-            return Path.resolve(__dirname, '../../.bin');
+            return Path.resolve(__root, '../.bin');
         } else {
             // This only happens when we're testing
-            return Path.resolve(__dirname, '../test-bin');
+            return Path.resolve(__root, 'test-bin');
         }
     }
 }

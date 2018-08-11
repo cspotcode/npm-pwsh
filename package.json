@@ -1,6 +1,6 @@
 {
   "name": "get-powershell",
-  "version": "0.0.4-beta2",
+  "version": "0.0.4-beta3",
   "description": "Automatically downloads and extracts powershell, allowing you to use it in NPM scripts and node projects even with Linux and Mac developers who don't know or care about installing it.",
   "bin": {
     "pwsh": "./bin/pwsh"

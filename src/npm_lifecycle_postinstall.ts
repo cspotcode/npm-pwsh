@@ -94,6 +94,7 @@ async function main() {
 
         // Extract the archive.
         log(`Extracting archive to ${ extractionTargetPath }...`);
+        mkdirpSync(extractionTargetPath);
         await extractArchive(build.extension, archiveDownloadPath, extractionTargetPath);
         log(`Extracted to ${ extractionTargetPath }`);
 

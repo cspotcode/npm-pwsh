@@ -74,7 +74,8 @@ function main {
                 pwshVersion = $pwshVersion;
             }
             $buildTags | convertto-json -depth 100 | out-file -encoding utf8 ./dist/buildTags.json
-            Write-host 'Publishing:'
+            write-host ''
+            Write-host 'PUBLISHING:'
             write-host "npm version: $npmVersion"
             write-host "npm dist-tag: $distTag"
             write-host "pwsh version: $pwshVersion"

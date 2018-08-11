@@ -1,7 +1,7 @@
 {
   "name": "get-powershell",
-  "version": "0.0.4-beta3",
-  "description": "Automatically downloads and extracts powershell, allowing you to use it in NPM scripts and node projects even with Linux and Mac developers who don't know or care about installing it.",
+  "version": "0.0.5-beta",
+  "description": "Automatically downloads and extracts PowerShell Core, allowing you to use it in NPM scripts and node projects even with Linux and Mac developers.",
   "bin": {
     "pwsh": "./bin/pwsh"
   },
@@ -42,7 +42,6 @@
     "mkdirp": "^0.5.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
-    "shebang-loader": "0.0.1",
     "source-map-loader": "^0.2.3",
     "tar": "^4.1.1",
     "ts-node": "^7.0.0",
@@ -55,9 +54,6 @@
   },
   "files": [
     "bin",
-    "dist",
-    "out",
-    "src",
-    "tsconfig.json"
+    "dist"
   ]
 }

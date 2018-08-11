@@ -1,3 +1,4 @@
+import * as Path from 'path';
 import * as webpack from 'webpack';
 
 const config: webpack.Configuration = {
@@ -14,20 +15,23 @@ const config: webpack.Configuration = {
     },
     devtool: 'source-map',
 
-    plugins: [
-        new webpack.BannerPlugin({ banner: "#!/usr/bin/env node", raw: true }),
-        new webpack.DefinePlugin({
-            '__WEBPACK_DIRNAME__': '__dirname',
-        }),
-    ],
-    
+    externals: function(context, request, callback) {
+        const localExternals = [
+            './out/buildTags.json',
+            './out/__root.js'
+        ];
+        for(const localExternal of localExternals) {
+            if(request[0] === '.' && Path.resolve(context, request) === Path.resolve(__dirname, localExternal)) {
+                return callback(null, 'commonjs ' + request);
+            }
+        }
+        callback(null, undefined);
+    },
+
     module: {
         rules: [{
             test: /\.js$/,
-            use: [
-                'source-map-loader',
-                'shebang-loader'
-            ]
+            use: ['source-map-loader']
         }]
     },
 };

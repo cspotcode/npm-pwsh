@@ -1,2 +1,6 @@
 node_modules
 out
+dist
+src__defunct__
+wsl-install
+test-bin

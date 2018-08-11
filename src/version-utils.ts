@@ -9,7 +9,7 @@ export interface Version {
     version: string;
     /** Output of `pwsh --version`, used to double-check that the ambient installed pwsh matches the expected version */
     versionOutput: string;
-    builds: ReadonlyArray<Readonly<Build>>;
+    builds: Array<Build>;
 }
 
 export type Extension = '.tar.gz' | '.zip' | '.unknown';
@@ -32,12 +32,15 @@ export interface VersionBuildPair {
 
 /**
  * Returns the version and build of powershell we should install, or undefined if no know candidate is found.
+ * @param pwshVersion A pwsh version number or 'latest'
  */
-export function getBestBuild(machine: Machine = process): VersionBuildPair {
+export function getBestBuild(pwshVersion: string, machine: Machine = process): VersionBuildPair {
     for(let v of versions) {
-        for(let b of v.builds) {
-            if(b.arch === machine.arch && b.platform === machine.platform) {
-                return {version: v, build: b};
+        if(pwshVersion === 'latest' || v.version === pwshVersion) {
+            for(let b of v.builds) {
+                if(b.arch === machine.arch && b.platform === machine.platform) {
+                    return {version: v, build: b};
+                }
             }
         }
     }

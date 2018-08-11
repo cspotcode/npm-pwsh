@@ -2,14 +2,15 @@
     "compileOnSave": true,
     "compilerOptions": {
         "target": "es5",
-        "lib": ["es5", "es2015.promise"],
+        "lib": ["esnext"],
         "module": "commonjs",
         "rootDir": "src",
         "outDir": "out",
         "importHelpers": true,
-        "sourceMap": true
+        "sourceMap": true,
+        "moduleResolution": "node"
     },
     "include": [
-        "src/**/*"
+        "src/*"
     ]
 }

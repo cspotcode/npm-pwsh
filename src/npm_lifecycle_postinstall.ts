@@ -1,5 +1,3 @@
-#!/usr/bin/env node
-
 import * as Path from 'path';
 import {sync as mkdirpSync} from 'mkdirp';
 import * as fs from 'fs';
@@ -14,7 +12,8 @@ import {
   TODO,
   pathsEquivalent,
   createSymlinkTo,
-  extractArchive
+  extractArchive,
+  buildTags
 } from "./util";
 import * as which from 'which';
 import { getBestBuild, getFilenameForBuild, getDirnameForBuild } from './version-utils';
@@ -57,7 +56,7 @@ async function main() {
     /** Path to powershell executable */
     let symlinkTarget: string;
 
-    const {version, build} = getBestBuild();
+    const {version, build} = getBestBuild(buildTags.pwshVersion);
     const cacheDirnameForBuild = getDirnameForBuild({version, build});
 
     // Check if our expected Powershell version is already downloaded and installed in the cache.

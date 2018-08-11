@@ -14,13 +14,20 @@ import { promisify } from 'util';
 import { Extension } from './version-utils';
 import * as stream from 'stream';
 import {spawnSync} from 'child_process';
+import { __root } from './__root';
 
 export type TODO = any;
 
-declare global {
-    const __WEBPACK_DIRNAME__: string;
+/**
+ * Fields baked into the package .tar.gz to configure behavior without any code changes.
+ */
+export interface BuildTags {
+    /** npm dist-tag */
+    distTag: string;
+    /** Powershell version that this package should install, or 'latest' if it should install the newest compatible version */
+    pwshVersion: string;
 }
-export const __root = Path.join(typeof __WEBPACK_DIRNAME__ === 'undefined' ? __dirname : __WEBPACK_DIRNAME__, '..');
+export const buildTags: BuildTags = require('./buildTags.json');
 
 /** return the sha256 of a file as a hex-formatted string */
 export async function sha256OfFile(path: string): Promise<string> {

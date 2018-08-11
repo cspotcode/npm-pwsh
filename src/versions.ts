@@ -151,6 +151,6 @@ export const versions: Array<Version> = [{
     }]
 }];
 
-export const latestVersion = versions.filter(v => v.version === latestVersionString)[0]!;
+export const latestVersion = versions[0].version;
 
 assert(latestVersion);

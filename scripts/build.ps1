@@ -3,14 +3,14 @@ param(
     [switch] $compile,
     [switch] $getPwshVersions,
     <# `npm version` and prepare CHANGELOG for new version #>
-    # [switch] $prePublish,
+    [switch] $prePublish,
+    [string] $npmVersionFlag,
     # <# npm publish all tags #>
     [switch] $publish,
     <# update CHANGELOG for next version #>
-    # [switch] $postPublish
-    # <# powershell version that this package should install, or 'latest' to install the latest version #>
-    # [string] $pwshVersion = 'latest'
-    [string[]] $parseVersion
+    [switch] $postPublish,
+    [string[]] $parseVersion,
+    [switch] $dryrun
 )
 
 $ErrorActionPreference = 'Stop'
@@ -38,14 +38,34 @@ function main {
         cp ./out/__root.js ./dist/
     }
 
+    if($prePublish) {
+        if($npmVersionFlag -eq $null) { throw "must pass -npmVersionFlag" }
+        write-host 'bumping npm version'
+        run { npm version --no-git-tag-version --allow-same-version $npmVersionFlag }
+        $npmVersion = (readfile package.json | convertfrom-json).version
+        run { git add package.json }
+        write-host 'preparing changelog...'
+        writefile CHANGELOG.md ((readfile CHANGELOG.md) -replace 'vNEXT',"v$npmVersion")
+        write-host 'Update and `git add` changelog.  Make sure package.json version is accurate.  Then run publish.'
+    }
+
     if($publish) {
+
         $pwshVersions = & {
             'latest'
             ( getPwshVersions ).version
         }
         $pwshVersions
-        $npmBaseVersion = (get-content package.json | convertfrom-json).version
-        write-host 'npmBaseVersion: ' + $npmBaseVersion
+        $npmBaseVersion = ( readfile package.json | convertfrom-json ).version
+
+        write-host "Creating version commit and tag for $npmBaseVersion"
+        if(-not $dryrun) {
+            run { git add package.json }
+            run { git commit -m "v$npmBaseVersion" }
+            run { git tag "v$npmBaseVersion" }
+        }
+
+        write-host "npmBaseVersion: $npmBaseVersion"
         foreach($pwshVersion in $pwshVersions) {
             $distTag = if($pwshVersion -eq 'latest') { 'latest' } else { "pwsh$pwshVersion" }
             $npmVersion = if($pwshVersion -eq 'latest') { $npmBaseVersion } else { "$npmBaseVersion-pwsh$pwshVersion" }
@@ -55,18 +75,28 @@ function main {
             }
             $buildTags | convertto-json -depth 100 | out-file -encoding utf8 ./dist/buildTags.json
             Write-host 'Publishing:'
-            write-host 'npm version: ' + $npmVersion
-            write-host 'npm dist-tag: ' + $distTag
-            write-host 'pwsh version: ' + $pwshVersion
-            write-host 'buildTags.json: ' + get-content ./dist/buildTags.json
-            run { npm version --no-git-tag-version $npmVersion --allow-same-version }
-            # run { npm publish --dist-tag $buildTags.distTag }
+            write-host "npm version: $npmVersion"
+            write-host "npm dist-tag: $distTag"
+            write-host "pwsh version: $pwshVersion"
+            write-host "buildTags.json: $(readfile ./dist/buildTags.json)"
+            if(-not $dryrun) {
+                run { npm version --no-git-tag-version $npmVersion --allow-same-version }
+                run { npm publish --dist-tag $buildTags.distTag }
+            }
             write-host '-----'
         }
         run { npm version --no-git-tag-version $npmBaseVersion --allow-same-version }
+    }
 
+    if($postPublish) {
+        write-host 'adding vNEXT to changelog, committing to git'
+        writefile CHANGELOG.md "# vNEXT`n`n* `n`n$(readfile CHANGELOG.md)"
+        run { git add CHANGELOG.md }
+        run { git commit -m "Bump changelog for next version" }
 
-        exit
+        run { git push }
+        run { git push --tags }
+
     }
 
     if($parseVersion) {
@@ -110,6 +140,17 @@ function getPwshVersions {
 '@
     } | convertfrom-json
     $versions
+}
+
+function readfile($path) {
+    ,(get-content -raw -encoding utf8 -path $path)
+}
+function writefile {
+    param(
+        $path,
+        [Parameter(valuefrompipeline)] $content
+    )
+    [IO.File]::WriteAllText(($path | resolve-path), $content)
 }
 
 function run($block) {

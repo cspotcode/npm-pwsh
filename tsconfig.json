@@ -6,7 +6,8 @@
         "module": "commonjs",
         "rootDir": "src",
         "outDir": "out",
-        "importHelpers": true
+        "importHelpers": true,
+        "sourceMap": true
     },
     "include": [
         "src/**/*"

@@ -33,7 +33,7 @@ npm install --global get-powershell
         "get-powershell": "0.0.3" // ... or the latest version
     },
     "scripts": {
-        "test": "powershell -File ./scripts/test.ps1"
+        "test": "pwsh -NoProfile ./scripts/test.ps1"
     }
 }
 ```

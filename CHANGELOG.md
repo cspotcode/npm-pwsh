@@ -1,3 +1,7 @@
+# vNEXT
+
+* 
+
 # v0.0.5
 
 * Publishes tagged packages that install a specific version of PowerShell Core rather than the latest version.

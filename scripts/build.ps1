@@ -82,7 +82,7 @@ function main {
             write-host "buildTags.json: $(readfile ./dist/buildTags.json)"
             if(-not $dryrun) {
                 run { npm version --no-git-tag-version $npmVersion --allow-same-version }
-                run { npm publish --dist-tag $buildTags.distTag }
+                run { npm publish --tag $buildTags.distTag }
             }
             write-host '-----'
         }

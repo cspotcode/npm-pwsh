@@ -37,3 +37,17 @@ npm install --global get-powershell
     }
 }
 ```
+
+## FAQ
+
+### Where is powershell being installed?
+
+```
+# On Linux, the shared, extracted powershell installations are stored here:
+cd "$(npm get prefix)/lib/node_modules/@cspotcode/get-powershell--cache"
+ls # shows all the versions installed
+```
+
+### How do I install a specific version of PowerShell?
+
+By default `get-powershell` installs the latest version of PowerShell

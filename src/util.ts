@@ -136,9 +136,11 @@ function finished(stream: NodeJS.WritableStream, waitForEvent: 'end' | 'finish' 
 
 /** spawn a process on PATH, get the full stdout as a string.  Throw if process returns non-zero status or anything else goes wrong. */
 export function getStdout(commandAndArgs): string {
-    const result = spawnSync(commandAndArgs[0], commandAndArgs.slice(1));
+    const result = spawnSync(commandAndArgs[0], commandAndArgs.slice(1), {
+        encoding: 'utf8'
+    });
     if(result.status !== 0) throw new Error(`process returned non-zero status: ${ result.status }`);
-    return result.stdout;
+    return result.stdout.trim();
 }
 
 /** Returns npm prefix, verbatim (no path normalization, straight from the `npm` command) */

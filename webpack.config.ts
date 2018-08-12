@@ -18,7 +18,7 @@ const config: webpack.Configuration = {
     externals: function(context, request, callback) {
         const localExternals = [
             './out/buildTags.json',
-            './out/__root.js'
+            './out/__root'
         ];
         for(const localExternal of localExternals) {
             if(request[0] === '.' && Path.resolve(context, request) === Path.resolve(__dirname, localExternal)) {

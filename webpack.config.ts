@@ -15,18 +15,21 @@ const config: webpack.Configuration = {
     },
     devtool: 'source-map',
 
-    externals: function(context, request, callback) {
-        const localExternals = [
-            './out/buildTags.json',
-            './out/__root'
-        ];
-        for(const localExternal of localExternals) {
-            if(request[0] === '.' && Path.resolve(context, request) === Path.resolve(__dirname, localExternal)) {
-                return callback(null, 'commonjs ' + request);
+    externals: [
+        function(context, request, callback) {
+            const localExternals = [
+                './out/buildTags.json',
+                './out/__root'
+            ];
+            for(const localExternal of localExternals) {
+                if(request[0] === '.' && Path.resolve(context, request) === Path.resolve(__dirname, localExternal)) {
+                    return callback(null, 'commonjs ' + request);
+                }
             }
-        }
-        callback(null, undefined);
-    },
+            callback(null, undefined);
+        },
+        {tar: 'commonjs tar'}
+    ],
 
     module: {
         rules: [{

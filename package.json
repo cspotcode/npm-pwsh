@@ -1,6 +1,6 @@
 {
   "name": "get-powershell",
-  "version": "0.0.5-beta",
+  "version": "0.0.5-beta2",
   "description": "Automatically downloads and extracts PowerShell Core, allowing you to use it in NPM scripts and node projects even with Linux and Mac developers.",
   "bin": {
     "pwsh": "./bin/pwsh"

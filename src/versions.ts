@@ -38,40 +38,38 @@ export const versions: Array<Version> = [{
     version: '6.0.3',
     versionOutput: 'PowerShell v6.0.3',
     builds: [
-        [
-            {
-                "platform":  "linux",
-                "arch":  "x64",
-                "extension":  ".tar.gz",
-                "sha256":  "A43D3056688FABC442BFBE0FD7A096F7E28036759EFF9D6EBE8CB9155C9D9AAB",
-                "url":  "https://github.com/PowerShell/PowerShell/releases/download/v6.0.3/powershell-6.0.3-linux-x64.tar.gz",
-                bin: 'pwsh'
-            },
-            {
-                "platform":  "darwin",
-                "arch":  "x64",
-                "extension":  ".tar.gz",
-                "sha256":  "9161416723031CA9C5422A707376660EF2F5D6D64D3B8A94B107EB1AABF3D2F0",
-                "url":  "https://github.com/PowerShell/PowerShell/releases/download/v6.0.3/powershell-6.0.3-osx-x64.tar.gz",
-                bin: 'pwsh'
-            },
-            {
-                "platform":  "win32",
-                "arch":  "x64",
-                "extension":  ".zip",
-                "sha256":  "DFFBB84E3E474E00100F6E51F36F7CC1146C70E68CAB72F94AA91AB35CB24AC7",
-                "url":  "https://github.com/PowerShell/PowerShell/releases/download/v6.0.3/PowerShell-6.0.3-win-x64.zip",
-                bin: 'pwsh.exe'
-            },
-            {
-                "platform":  "win32",
-                "arch":  "ia32",
-                "extension":  ".zip",
-                "sha256":  "51A3FB4AF86C72E300B3C9AAD93BE1665CE67E1077CF109B72CC57F4F8AC539C",
-                "url":  "https://github.com/PowerShell/PowerShell/releases/download/v6.0.3/PowerShell-6.0.3-win-x86.zip",
-                bin: 'pwsh.exe'
-            }
-        ]
+        {
+            "platform":  "linux",
+            "arch":  "x64",
+            "extension":  ".tar.gz",
+            "sha256":  "A43D3056688FABC442BFBE0FD7A096F7E28036759EFF9D6EBE8CB9155C9D9AAB",
+            "url":  "https://github.com/PowerShell/PowerShell/releases/download/v6.0.3/powershell-6.0.3-linux-x64.tar.gz",
+            bin: 'pwsh'
+        },
+        {
+            "platform":  "darwin",
+            "arch":  "x64",
+            "extension":  ".tar.gz",
+            "sha256":  "9161416723031CA9C5422A707376660EF2F5D6D64D3B8A94B107EB1AABF3D2F0",
+            "url":  "https://github.com/PowerShell/PowerShell/releases/download/v6.0.3/powershell-6.0.3-osx-x64.tar.gz",
+            bin: 'pwsh'
+        },
+        {
+            "platform":  "win32",
+            "arch":  "x64",
+            "extension":  ".zip",
+            "sha256":  "DFFBB84E3E474E00100F6E51F36F7CC1146C70E68CAB72F94AA91AB35CB24AC7",
+            "url":  "https://github.com/PowerShell/PowerShell/releases/download/v6.0.3/PowerShell-6.0.3-win-x64.zip",
+            bin: 'pwsh.exe'
+        },
+        {
+            "platform":  "win32",
+            "arch":  "ia32",
+            "extension":  ".zip",
+            "sha256":  "51A3FB4AF86C72E300B3C9AAD93BE1665CE67E1077CF109B72CC57F4F8AC539C",
+            "url":  "https://github.com/PowerShell/PowerShell/releases/download/v6.0.3/PowerShell-6.0.3-win-x86.zip",
+            bin: 'pwsh.exe'
+        }
     ]
 }, {
     version: '6.0.2',

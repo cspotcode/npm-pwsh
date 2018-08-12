@@ -1,5 +1,6 @@
 # v0.0.6
 
+* Fix broken 6.0.3 metadata.
 * Fix bug in --global installations; was not getting npm prefix correctly.
 
 # v0.0.5

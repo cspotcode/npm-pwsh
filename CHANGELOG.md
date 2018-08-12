@@ -1,6 +1,6 @@
-# vNEXT
+# v0.0.6
 
-* 
+* Fix bug in --global installations; was not getting npm prefix correctly.
 
 # v0.0.5
 

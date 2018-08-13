@@ -13,7 +13,7 @@ import * as cmdShim from 'cmd-shim';
 import { promisify } from 'util';
 import { Extension } from './version-utils';
 import * as stream from 'stream';
-import {spawnSync} from 'child_process';
+import {sync as spawnSync} from 'cross-spawn';
 import { __root } from './__root';
 
 export type TODO = any;

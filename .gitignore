@@ -3,4 +3,5 @@ out
 dist
 src__defunct__
 wsl-install
+win-install
 test-bin

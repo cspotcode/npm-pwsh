@@ -9,7 +9,7 @@ export interface Version {
     version: string;
     /** Output of `pwsh --version`, used to double-check that the ambient installed pwsh matches the expected version */
     versionOutput: string;
-    builds: Array<Build>;
+    builds: ReadonlyArray<Readonly<Build>>;
 }
 
 export type Extension = '.tar.gz' | '.zip' | '.unknown';

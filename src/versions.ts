@@ -2,7 +2,7 @@ import { Version } from './version-utils';
 import * as assert from 'assert';
 
 // When a new version of powershell comes out, add the various downloads to this list.
-export const versions: Array<Version> = [{
+export const versions: ReadonlyArray<Readonly<Version>> = [{
     version: '6.0.4',
     versionOutput: 'PowerShell v6.0.4',
     builds: [{

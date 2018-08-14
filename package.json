@@ -6,7 +6,7 @@
     "pwsh": "./bin/pwsh"
   },
   "scripts": {
-    "postinstall": "node ./dist/npm_lifecycle_postinstall.js",
+    "postinstall": "node ./npm_lifecycle_postinstall.js",
     "dump-env": "node -e console.dir(process.env)"
   },
   "author": "Andrew Bradley <cspotcode@gmail.com>",
@@ -57,6 +57,7 @@
   },
   "files": [
     "bin",
-    "dist"
+    "dist",
+    "npm_lifecycle_postinstall.js"
   ]
 }

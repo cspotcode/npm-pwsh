@@ -225,20 +225,36 @@ export function fullyNormalizePath(path: string): string {
     return path;
 }
 
-export async function createSymlinkTo(linkPath: string, targetPath: string, log: typeof console['log']) {
+export function unlinkIfExistsSync(path: string) {
     try {
-        fs.unlinkSync(linkPath);
+        fs.unlinkSync(path);
     } catch(e) {
         if(e.code !== 'ENOENT') throw e;
     }
+}
+
+/**
+ * TODO the API and scope of this function is hacky and confusing (e.g. passing a logger instance)
+ */
+export async function createSymlinkTo(args: {
+    linkPath: string;
+    targetPath: string;
+    intermediateLinkPath: string;
+    log: typeof console['log']
+}) {
+    const {linkPath, targetPath, intermediateLinkPath, log} = args;
+    // unlinkIfExistsSync(linkPath);
+    unlinkIfExistsSync(intermediateLinkPath);
     // Windows platforms: use cmd-shim
     if(process.platform === 'win32') {
         log(`Creating .cmd shim from ${ linkPath } to ${ targetPath }...`);
-        await promisify(cmdShim)(targetPath, linkPath.replace(/\.cmd$/, ''));
+        await promisify(cmdShim)(targetPath, intermediateLinkPath.replace(/\.cmd$/, ''));
     }
-    // Non-windows platforms: use a symlink
+    // Non-windows platforms: use a symlink to a symlink
+    // Intermediate symlink is necessary because npm refuses to delete .bin/<symlink> unless it points to *within* the module's directory
     else {
         log(`Symlinking from ${ linkPath } to ${ targetPath }...`);
-        fs.symlinkSync(targetPath, linkPath);
+        // fs.symlinkSync(intermediateLinkPath, linkPath);
+        fs.symlinkSync(targetPath, intermediateLinkPath);
     }
 }

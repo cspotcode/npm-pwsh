@@ -1,4 +1,3 @@
-#!/usr/bin/env node
-// Installation should replace this file with a symlink to a real PowerShell binary.
-console.error('Installation should have replaced with file with a symlink.  Something went wrong.');
-process.exit(1);
+# Installation should replace this file with a symlink to a real PowerShell binary.
+echo 'Installation should have replaced this file with a symlink.  Something went wrong.' 1>&2
+exit 1

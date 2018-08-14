@@ -1,6 +1,8 @@
 param(
     <# compile TS and bundle via webpack #>
     [switch] $compile,
+    [switch] $package,
+    [switch] $test,
     [switch] $getPwshVersions,
     <# `npm version` and prepare CHANGELOG for new version #>
     [switch] $prePublish,
@@ -32,10 +34,36 @@ function main {
 
     if($compile) {
         echo out dist | % { (test-path $_) -and (rm -recurse $_) } | out-null
-        # run { tsc -p . }
-        tsc -p .
+        run { tsc -p . }
         run { webpack }
         cp ./out/__root.js ./dist/
+    }
+
+    function forEachPwshVersion($pwshVersions, $action) {
+        $npmBaseVersion = ( readfile package.json | convertfrom-json ).version
+        foreach($pwshVersion in $pwshVersions) {
+            $distTag = if($pwshVersion -eq 'latest') { 'latest' } else { "pwsh$pwshVersion" }
+            $npmVersion = if($pwshVersion -eq 'latest') { $npmBaseVersion } else { "$npmBaseVersion-pwsh$pwshVersion" }
+            $buildTags = @{
+                distTag = $distTag;
+                pwshVersion = $pwshVersion;
+            }
+            $buildTags | convertto-json -depth 100 | out-file -encoding utf8 ./dist/buildTags.json
+            & $action
+        }
+    }
+
+    if($package) {
+        forEachPwshVersion @('latest') {
+            run { npm pack }
+        }
+    }
+
+    if($test) {
+        write-host 'Testing in Windows'
+        pwsh.exe -noprofile -command invoke-pester
+        write-host 'Testing in Linux via WSL'
+        bash -c 'pwsh -command invoke-pester'
     }
 
     if($prePublish) {
@@ -57,23 +85,14 @@ function main {
         }
         $pwshVersions
         $npmBaseVersion = ( readfile package.json | convertfrom-json ).version
-
         write-host "Creating version commit and tag for $npmBaseVersion"
         if(-not $dryrun) {
             run { git add package.json }
             run { git commit -m "v$npmBaseVersion" }
             run { git tag "v$npmBaseVersion" }
         }
-
         write-host "npmBaseVersion: $npmBaseVersion"
-        foreach($pwshVersion in $pwshVersions) {
-            $distTag = if($pwshVersion -eq 'latest') { 'latest' } else { "pwsh$pwshVersion" }
-            $npmVersion = if($pwshVersion -eq 'latest') { $npmBaseVersion } else { "$npmBaseVersion-pwsh$pwshVersion" }
-            $buildTags = @{
-                distTag = $distTag;
-                pwshVersion = $pwshVersion;
-            }
-            $buildTags | convertto-json -depth 100 | out-file -encoding utf8 ./dist/buildTags.json
+        forEachPwshVersion $pwshVersions {
             write-host ''
             Write-host 'PUBLISHING:'
             write-host "npm version: $npmVersion"

@@ -1,0 +1,5 @@
+.npmrc
+node_modules
+npm-prefix
+package-lock.json
+package.json

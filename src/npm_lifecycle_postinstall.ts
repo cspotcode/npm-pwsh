@@ -18,10 +18,11 @@ import {
 import * as which from 'which';
 import { getBestBuild, getFilenameForBuild, getDirnameForBuild } from './version-utils';
 import { getCacheInstallDirectory, readCacheManifest, getCacheManifestPath } from './cache';
+import { __root } from './__root';
 
 const log = console.log.bind(console);
 
-const isGlobalInstall = !!process.env.npm_config_global;
+const intermediateLinkPath = Path.join(__root, 'bin', 'pwsh');
 
 async function main() {
     // Find powershell on the PATH; maybe it's already installed.
@@ -39,7 +40,12 @@ async function main() {
     foundPath = null;
     if(foundPath) {
         log('Found pwsh on PATH; no action required.');
-        createSymlinkTo(ownBinPath, foundPath, log);
+        await createSymlinkTo({
+            linkPath: ownBinPath,
+            targetPath: foundPath,
+            intermediateLinkPath,
+            log
+        });
         process.exit(0);
     }
 
@@ -108,7 +114,12 @@ async function main() {
     }
 
     // Replace our stub with a symlink to the real powershell installation
-    await createSymlinkTo(ownBinPath, symlinkTarget, log);
+    await createSymlinkTo({
+        linkPath: ownBinPath,
+        targetPath: symlinkTarget,
+        intermediateLinkPath,
+        log
+    });
 
     log(`Done!`);
 }

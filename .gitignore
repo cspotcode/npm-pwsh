@@ -5,3 +5,4 @@ src__defunct__
 wsl-install
 win-install
 test-bin
+get-powershell-*.tgz

@@ -7,7 +7,7 @@
   },
   "scripts": {
     "postinstall": "node ./dist/npm_lifecycle_postinstall.js",
-    "compile": "tsc -p . && webpack"
+    "dump-env": "node -e console.dir(process.env)"
   },
   "author": "Andrew Bradley <cspotcode@gmail.com>",
   "license": "MIT",

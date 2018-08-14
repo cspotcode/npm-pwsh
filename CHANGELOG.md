@@ -1,6 +1,9 @@
-# vNEXT
+# v0.0.7
 
-* 
+* Adds automated tests.
+* Fix issue where npm would refuse to remove the installed symlinks / cmd shims when you `npm uninstall get-powershell`
+* Fix problem `npm install`ing a fresh git clone (only affects contributors, not consumers)
+* Switch to cross-spawn; fixes bug globally installing on Windows.
 
 # v0.0.6
 

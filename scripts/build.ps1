@@ -128,7 +128,7 @@ function main {
             if($m) {
                 $name = $_.trim()
             } else {
-                $name -match 'PowerShell-(?<version>.*?)-(?<platform>.*?)-(?<arch>.*?)(?<extension>\..*)'
+                $name -match 'PowerShell-(?<version>.*)-(?<platform>.*?)-(?<arch>.*?)(?<extension>\..*)'
                 [pscustomobject]@{
                     # name = $name;
                     # version = $Matches.version;
@@ -137,6 +137,7 @@ function main {
                     extension = $Matches.extension;
                     sha256 = $_.trim();
                     url = "https://github.com/PowerShell/PowerShell/releases/download/v$( $Matches.version )/$name";
+                    bin = 'pwsh'
                 }
             }
         } |
@@ -146,6 +147,7 @@ function main {
         % {
             $_.arch = @{ x64 = 'x64'; x86 = 'ia32'; }.($_.arch);
             $_.platform = @{ osx = 'darwin'; win = 'win32'; linux = 'linux' }.($_.platform);
+            if($_.platform -eq 'win32') { $_.bin += '.exe' }
             $_
         }
 

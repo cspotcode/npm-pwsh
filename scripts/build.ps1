@@ -87,7 +87,8 @@ function main {
     if($publish) {
 
         $pwshVersions = & {
-            'latest'
+            'latest',
+            'prerelease',
             ( getPwshVersions ).version
         }
         $pwshVersions

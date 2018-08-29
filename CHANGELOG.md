@@ -1,3 +1,8 @@
+# v0.0.8
+
+* Adds support for prerelease versions of pwsh, installable via `npm i get-powershell@prerelease`.
+* Adds pwsh v6.1.0-rc.1.
+
 # v0.0.7
 
 * Adds automated tests.

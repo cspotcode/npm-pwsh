@@ -185,6 +185,7 @@ export const versions: ReadonlyArray<Readonly<Version>> = [{
     }]
 }];
 
-export const latestVersion = versions[0].version;
+export const latestStableVersion = versions.find(v => !v.isPrerelease).version;
+export const latestIncludingPrereleaseVersion = versions[0].version;
 
-assert(latestVersion);
+assert(latestStableVersion);

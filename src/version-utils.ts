@@ -9,6 +9,7 @@ export interface Version {
     version: string;
     /** Output of `pwsh --version`, used to double-check that the ambient installed pwsh matches the expected version */
     versionOutput: string;
+    isPrerelease?: true;
     builds: ReadonlyArray<Readonly<Build>>;
 }
 
@@ -36,7 +37,7 @@ export interface VersionBuildPair {
  */
 export function getBestBuild(pwshVersion: string, machine: Machine = process): VersionBuildPair {
     for(let v of versions) {
-        if(pwshVersion === 'latest' || v.version === pwshVersion) {
+        if((pwshVersion === 'latest' && !v.isPrerelease) || v.version === pwshVersion) {
             for(let b of v.builds) {
                 if(b.arch === machine.arch && b.platform === machine.platform) {
                     return {version: v, build: b};

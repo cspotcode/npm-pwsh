@@ -37,7 +37,7 @@ export interface VersionBuildPair {
  */
 export function getBestBuild(pwshVersion: string, machine: Machine = process): VersionBuildPair {
     for(let v of versions) {
-        if((pwshVersion === 'latest' && !v.isPrerelease) || v.version === pwshVersion) {
+        if((pwshVersion === 'latest' && !v.isPrerelease) || pwshVersion === 'prerelease' || v.version === pwshVersion) {
             for(let b of v.builds) {
                 if(b.arch === machine.arch && b.platform === machine.platform) {
                     return {version: v, build: b};

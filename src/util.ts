@@ -24,7 +24,10 @@ export type TODO = any;
 export interface BuildTags {
     /** npm dist-tag */
     distTag: string;
-    /** Powershell version that this package should install, or 'latest' if it should install the newest compatible version */
+    /**
+     * Powershell version that this package should install,
+     * 'latest' if it should install the newest compatible stable version,
+     * or 'prerelease' if it should install the newest compatible version including prereleases */
     pwshVersion: string;
 }
 export const buildTags: BuildTags = require('./buildTags.json');

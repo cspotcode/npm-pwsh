@@ -14,6 +14,7 @@ param(
     [string[]] $parseVersion,
     [switch] $dryrun
 )
+$BoundParamNames = $PSBoundParameters.Keys
 
 $ErrorActionPreference = 'Stop'
 
@@ -42,8 +43,14 @@ function main {
     function forEachPwshVersion($pwshVersions, $action) {
         $npmBaseVersion = ( readfile package.json | convertfrom-json ).version
         foreach($pwshVersion in $pwshVersions) {
-            $distTag = if($pwshVersion -eq 'latest') { 'latest' } else { "pwsh$pwshVersion" }
-            $npmVersion = if($pwshVersion -eq 'latest') { $npmBaseVersion } else { "$npmBaseVersion-pwsh$pwshVersion" }
+            $distTag = if(@('latest', 'prerelease') -contains $pwshVersion) { $pwshVersion } else { "pwsh$pwshVersion" }
+            $npmVersion = if($pwshVersion -eq 'latest') {
+                $npmBaseVersion
+            } elseif ($pwshVersion -eq 'prerelease') {
+                "$npmBaseVersion-prerelease"
+            } else {
+                "$npmBaseVersion-pwsh$pwshVersion"
+            }
             $buildTags = @{
                 distTag = $distTag;
                 pwshVersion = $pwshVersion;
@@ -67,7 +74,7 @@ function main {
     }
 
     if($prePublish) {
-        if($npmVersionFlag -eq $null) { throw "must pass -npmVersionFlag" }
+        if(-not ($BoundParamNames -contains 'npmVersionFlag')) { throw "must pass -npmVersionFlag" }
         write-host 'bumping npm version'
         run { npm version --no-git-tag-version --allow-same-version $npmVersionFlag }
         $npmVersion = (readfile package.json | convertfrom-json).version

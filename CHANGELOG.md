@@ -1,3 +1,7 @@
+# vNEXT
+
+* Mark v6.0.0-rc2 as prerelease.
+
 # v0.0.8
 
 * Adds support for prerelease versions of pwsh, installable via `npm i get-powershell@prerelease`.

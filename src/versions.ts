@@ -147,6 +147,7 @@ export const versions: ReadonlyArray<Readonly<Version>> = [{
 }, {
     version: '6.0.0-rc.2',
     versionOutput: 'PowerShell v6.0.0-rc.2',
+    isPrerelease: true,
     builds: [{
         arch: 'x64',
         platform: 'linux',

@@ -70,7 +70,7 @@ function main {
         write-host 'Testing in Windows'
         pwsh.exe -noprofile -command invoke-pester
         write-host 'Testing in Linux via WSL'
-        bash -c 'pwsh -command invoke-pester'
+        bash -c "bash -l -c 'pwsh -command invoke-pester'"
     }
 
     if($prePublish) {

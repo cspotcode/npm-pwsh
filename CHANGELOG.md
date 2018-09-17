@@ -1,6 +1,9 @@
 # vNEXT
 
+* Add PowerShell Core v6.1.0.
+* Remove "beta" header from README.
 * Mark v6.0.0-rc2 as prerelease.
+* Fix nvm compatibility when running WSL tests.
 
 # v0.0.8
 

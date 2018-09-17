@@ -1,4 +1,4 @@
-# vNEXT
+# v0.1.0
 
 * Add PowerShell Core v6.1.0.
 * Remove "beta" header from README.

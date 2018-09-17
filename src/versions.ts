@@ -3,6 +3,43 @@ import * as assert from 'assert';
 
 // When a new version of powershell comes out, add the various downloads to this list.
 export const versions: ReadonlyArray<Readonly<Version>> = [{
+    version: '6.1.0',
+    versionOutput: 'PowerShell v6.1.0',
+    builds: [
+        {
+            platform:  "linux",
+            arch:  "x64",
+            extension:  ".tar.gz",
+            sha256:  "68674CFBA84ABF759C7E10EF6FCD926CBC125D9958E11A1926AF7CF7F604506C",
+            url:  "https://github.com/PowerShell/PowerShell/releases/download/v6.1.0/powershell-6.1.0-linux-x64.tar.gz",
+            bin:  "pwsh"
+        },
+        {
+            platform:  "darwin",
+            arch: "x64",
+            extension: ".tar.gz",
+            sha256: "F3DBC06EC6AA8615179A98765AC110CE63EC982239C5F3BE6FC52C434DDD9EF8",
+            url: "https://github.com/PowerShell/PowerShell/releases/download/v6.1.0/powershell-6.1.0-osx-x64.tar.gz",
+            bin: "pwsh"
+        },
+        {
+            platform: "win32",
+            arch: "x64",
+            extension: ".zip",
+            sha256: "CA4ED36E663AB5F7FD32F636F9D274B1544173CEA05B8A78481EB51C3F23163D",
+            url: "https://github.com/PowerShell/PowerShell/releases/download/v6.1.0/PowerShell-6.1.0-win-x64.zip",
+            bin: "pwsh.exe"
+        },
+        {
+            platform: "win32",
+            arch: "ia32",
+            extension: ".zip",
+            sha256: "B214DBA4E4FB3AFC8A4B946BCBEF95E8FBEC0E313214663938D57ECCD8B068B9",
+            url: "https://github.com/PowerShell/PowerShell/releases/download/v6.1.0/PowerShell-6.1.0-win-x86.zip",
+            bin: "pwsh.exe"
+        }
+    ]
+}, {
     version: '6.1.0-rc.1',
     isPrerelease: true,
     versionOutput: 'PowerShell v6.1.0-rc.1',

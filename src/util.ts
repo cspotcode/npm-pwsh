@@ -245,12 +245,16 @@ export async function createSymlinkTo(args: {
     intermediateLinkPath: string;
     log: typeof console['log']
 }) {
-    const {linkPath, targetPath, intermediateLinkPath, log} = args;
+    let {linkPath, targetPath, intermediateLinkPath, log} = args;
+    // Resolve all symlinks to avoid problems computing relative paths
+    linkPath = fs.realpathSync(linkPath);
+    targetPath = fs.realpathSync(targetPath);
+    intermediateLinkPath = fs.realpathSync(intermediateLinkPath);
     // unlinkIfExistsSync(linkPath);
     unlinkIfExistsSync(intermediateLinkPath);
     // Windows platforms: use cmd-shim
     if(process.platform === 'win32') {
-        log(`Creating .cmd shim from ${ linkPath } to ${ targetPath }...`);
+        log(`Creating .cmd shim from ${ linkPath } to ${ targetPath } (via ${ intermediateLinkPath })...`);
         await promisify(cmdShim)(targetPath, intermediateLinkPath.replace(/\.cmd$/, ''));
     }
     // Non-windows platforms: use a symlink to a symlink

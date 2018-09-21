@@ -71,7 +71,11 @@ async function main() {
         symlinkTarget = Path.resolve(cacheInstallationDirectory, cacheDirnameForBuild, manifest[cacheDirnameForBuild].relativePathToBin);
         try {
             // Assert that path both exists and is executable
-            assert(fs.statSync(symlinkTarget).mode & 0o100);
+            if(process.platform === 'win32') {
+                assert(fs.statSync(symlinkTarget));
+            } else {
+                assert(fs.statSync(symlinkTarget).mode & 0o100);
+            }            
         } catch(e) {
             symlinkTarget = undefined;
         }

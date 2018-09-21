@@ -1,3 +1,8 @@
+# v0.1.1
+
+* Avoid repeated, unnecessary package extractions on Windows.  [#11](https://github.com/cspotcode/npm-get-powershell/issues/11)
+* Fix support for symlinked npm prefix.  This affects users of nvs; possibly others.  [#9](https://github.com/cspotcode/npm-get-powershell/issues/9)
+
 # v0.1.0
 
 * Add PowerShell Core v6.1.0.

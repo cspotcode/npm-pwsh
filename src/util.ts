@@ -250,7 +250,7 @@ export async function createSymlinkTo(args: {
     unlinkIfExistsSync(intermediateLinkPath);
     // Windows platforms: use cmd-shim
     if(process.platform === 'win32') {
-        log(`Creating .cmd shim from ${ linkPath } to ${ targetPath }...`);
+        log(`Creating .cmd shim from ${ linkPath } to ${ targetPath } (via ${ intermediateLinkPath })...`);
         await promisify(cmdShim)(targetPath, intermediateLinkPath.replace(/\.cmd$/, ''));
     }
     // Non-windows platforms: use a symlink to a symlink

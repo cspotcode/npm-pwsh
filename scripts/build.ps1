@@ -96,7 +96,7 @@ function main {
         write-host "Creating version commit and tag for $npmBaseVersion"
         if(-not $dryrun) {
             run { git add package.json }
-            run { git commit -m "v$npmBaseVersion" }
+            run { git commit -m "v$npmBaseVersion" --allow-empty }
             run { git tag "v$npmBaseVersion" }
         }
         write-host "npmBaseVersion: $npmBaseVersion"

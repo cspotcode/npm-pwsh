@@ -68,7 +68,9 @@ function main {
 
     if($test) {
         write-host 'Testing in Windows'
-        pwsh.exe -noprofile -command invoke-pester
+        $winPwsh = get-command pwsh.cmd -ea continue
+        if(-not $winPwsh) { $winPwsh = get-command pwsh.exe }
+        & $winPwsh -noprofile -command invoke-pester
         write-host 'Testing in Linux via WSL'
         bash -c "bash -l -c 'pwsh -command invoke-pester'"
     }

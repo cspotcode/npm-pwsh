@@ -247,7 +247,15 @@ export async function createSymlinkTo(args: {
 }) {
     let {linkPath, targetPath, intermediateLinkPath, log} = args;
     // Resolve all symlinks to avoid problems computing relative paths
-    linkPath = fs.realpathSync(linkPath);
+    try {
+        // For linkPath, we don't actually *need* to resolve it, since we're not dealing with this file. (only target and intermediate paths)
+        // Package managers that do funky things may not create the .bin directory we're expecting, so this may fail.
+        // Gracefully fallback to the filename sans path.
+        // This produces slightly less descriptive output, but at least it's not inaccurate.
+        linkPath = fs.realpathSync(linkPath);
+    } catch(e) {
+        linkPath = Path.basename(linkPath);
+    }
     targetPath = fs.realpathSync(targetPath);
     intermediateLinkPath = fs.realpathSync(intermediateLinkPath);
     // unlinkIfExistsSync(linkPath);
@@ -260,7 +268,7 @@ export async function createSymlinkTo(args: {
     // Non-windows platforms: use a symlink to a symlink
     // Intermediate symlink is necessary because npm refuses to delete .bin/<symlink> unless it points to *within* the module's directory
     else {
-        log(`Symlinking from ${ linkPath } to ${ targetPath }...`);
+        log(`Symlinking from ${ linkPath } to ${ targetPath } (via ${ intermediateLinkPath })...`);
         // fs.symlinkSync(intermediateLinkPath, linkPath);
         fs.symlinkSync(targetPath, intermediateLinkPath);
     }

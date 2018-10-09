@@ -18,6 +18,9 @@ $BoundParamNames = $PSBoundParameters.Keys
 
 $ErrorActionPreference = 'Stop'
 
+$winPwsh = get-command pwsh.cmd -ea continue
+if(-not $winPwsh) { $winPwsh = get-command pwsh.exe }
+
 function validate {
     # if($pwshVersion -cne 'latest') {
     #     if(-not ($versions -contains $pwshVersion)) {
@@ -68,9 +71,7 @@ function main {
 
     if($test) {
         write-host 'Testing in Windows'
-        $winPwsh = get-command pwsh.cmd -ea continue
-        if(-not $winPwsh) { $winPwsh = get-command pwsh.exe }
-        & $winPwsh -noprofile -command invoke-pester
+        & $winPwsh -noprofile -command { invoke-pester -verbose }
         write-host 'Testing in Linux via WSL'
         bash -c "bash -l -c 'pwsh -command invoke-pester'"
     }

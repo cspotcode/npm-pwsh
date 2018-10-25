@@ -24,8 +24,7 @@ jobs:
     - stage: test
       os: windows
       script:
-        - npm install -g pnpm
-        - powershell -executionpolicy remotesigned -noprofile ./scripts/build.ps1 -compile -package -testWindows
+        - powershell -executionpolicy remotesigned -noprofile ./.travis/test-windows.ps1
     - stage: test
       os: mac
       script:

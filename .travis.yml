@@ -1,0 +1,38 @@
+# Requirements:
+# A build on Linux
+# A build on Mac
+# Package into a tarball
+# Install with latest version, check "powershell -version"
+# Install with requested older version, check "powershell -version"
+# Preinstall powershell (or a fake powershell binary), install with latest version, make sure it skips installation but exposed powershell on path
+# Preinstall powershell (or a fake powershell binary), install with requested older version, make sure it skips installation but exposed powershell on path
+
+# Matrix:
+# os: linux, mac
+# requested version: latest, beta7
+# fake powershell is preinstalled: true, false
+
+language: node_js
+node_js:
+  - "10"
+# matrix:
+#     - os: windows
+#     - os: linux
+#     - os: mac
+jobs:
+  include:
+    - stage: test
+      os: windows
+      script:
+        - npm install -g pnpm
+        - powershell -noprofile ./scripts/build.ps1 -compile -package -testWindows
+    - stage: test
+      os: mac
+      script:
+        - npm install -g pnpm
+        - powershell -noprofile ./scripts/build.ps1 -compile -package -testLinux
+    - stage: test
+      os: linux
+      script:
+        - npm install -g pnpm
+        - powershell -noprofile ./scripts/build.ps1 -compile -package -testLinux

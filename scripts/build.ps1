@@ -83,8 +83,8 @@ function main {
         if($LASTEXITCODE -ne 0) {throw "Non-zero exit code: $LASTEXITCODE"}
     }
     if($test -or $testLinux) {
-        write-host 'Testing in Linux via WSL'
-        bash -c "bash -l -c 'pwsh -noprofile -file ./test/test.ps1"
+        write-host 'Testing in Linux'
+        bash -c "bash -l -c 'pwsh -noprofile -file ./test/test.ps1'"
     }
 
     if($prePublish) {

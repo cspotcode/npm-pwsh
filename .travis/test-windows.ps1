@@ -6,6 +6,6 @@ npm install -g get-powershell@0.1.1-pwsh6.1.0
 mv C:\ProgramData\nvs\node\10.12.0\x64\node_modules\@cspotcode\get-powershell-cache\powershell-6.1.0-win32-x64 ./pwsh
 rm -r C:\ProgramData\nvs\node\10.12.0\x64\node_modules\@cspotcode\get-powershell-cache
 npm uninstall -g get-powershell
-# $env:Path = "$(Get-Location)/pwsh;" + $env:Path
-# npm install -g pnpm
-# pwsh -executionpolicy remotesigned -noprofile ./scripts/build.ps1 -compile -package -testWindows
+$env:Path = "$(Get-Location)/pwsh;" + $env:Path
+npm install -g pnpm
+pwsh -executionpolicy remotesigned -noprofile ./scripts/build.ps1 -compile -package -testWindows

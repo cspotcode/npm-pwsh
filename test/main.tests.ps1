@@ -18,8 +18,10 @@ $pwshVersion = (get-content $PSScriptRoot/../dist/buildTags.json | convertfrom-j
 $npm = (Get-Command npm).Source
 $pnpm = (Get-Command pnpm).Source
 
-$winPwsh = (get-command pwsh.cmd -ea continue).path
-if(-not $winPwsh) { $winPwsh = (get-command pwsh.exe).path }
+if($IsWindows) {
+    $winPwsh = (get-command pwsh.cmd -ea continue).path
+    if(-not $winPwsh) { $winPwsh = (get-command pwsh.exe).path }
+}
 
 Describe 'get-powershell' {
     $oldLocation = Get-Location
@@ -103,7 +105,7 @@ Describe 'get-powershell' {
             remove-item -recurse $npmPrefixRealpath -force
         }
         new-item -type directory $npmPrefixRealpath
-        # symlink $npmPrefixSymlink $npmPrefixRealpath
+        symlink $npmPrefixSymlink $npmPrefixRealpath
         set-content ./.npmrc -encoding utf8 "prefix = $($npmPrefix -replace '\\','\\')"
 
         $preexistingPwsh = get-command pwsh -EA SilentlyContinue

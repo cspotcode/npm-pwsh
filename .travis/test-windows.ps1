@@ -8,4 +8,4 @@ rm -r C:\ProgramData\nvs\node\10.12.0\x64\node_modules\@cspotcode\get-powershell
 npm uninstall -g get-powershell
 $env:Path = "$(Get-Location)/pwsh;" + $env:Path
 npm install -g pnpm
-pwsh -executionpolicy remotesigned -noprofile ./scripts/build.ps1 -compile -package -testWindows
+pwsh -executionpolicy remotesigned -noprofile ./scripts/build.ps1 -installPester -compile -package -testWindows

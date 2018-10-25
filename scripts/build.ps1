@@ -1,4 +1,6 @@
 param(
+    <# install pester on CI #>
+    [switch] $installPester,
     <# compile TS and bundle via webpack #>
     [switch] $compile,
     [switch] $package,
@@ -36,6 +38,10 @@ function main {
 
     if($getPwshVersions) {
         ( getPwshVersions ).version
+    }
+
+    if($installPester) {
+        install-module -scope currentuser -force pester
     }
 
     if($compile) {

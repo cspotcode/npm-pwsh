@@ -84,6 +84,7 @@ function main {
             import-module pester
             invoke-pester -verbose
         }
+        if($LASTEXITCODE -ne 0) {throw "Non-zero exit code: $LASTEXITCODE"}
     }
     if($test -or $testLinux) {
         write-host 'Testing in Linux via WSL'

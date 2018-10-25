@@ -1,8 +1,13 @@
 param(
+    <# install pester on CI #>
+    [switch] $installPester,
     <# compile TS and bundle via webpack #>
     [switch] $compile,
     [switch] $package,
     [switch] $test,
+    [switch] $testWindows,
+    [switch] $testWsl,
+    [switch] $testPosix,
     [switch] $getPwshVersions,
     <# `npm version` and prepare CHANGELOG for new version #>
     [switch] $prePublish,
@@ -12,14 +17,19 @@ param(
     <# update CHANGELOG for next version #>
     [switch] $postPublish,
     [string[]] $parseVersion,
-    [switch] $dryrun
+    [switch] $dryrun,
+    [string]$winPwsh
 )
 $BoundParamNames = $PSBoundParameters.Keys
 
 $ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
 
-$winPwsh = get-command pwsh.cmd -ea continue
-if(-not $winPwsh) { $winPwsh = get-command pwsh.exe }
+if(($test -or $testWindows) -and (-not $winPwsh)) {
+    $winPwsh = get-command pwsh.cmd -ea continue
+    if(-not $winPwsh) { $winPwsh = get-command pwsh.exe }
+    $winPwsh = $winPwsh.source
+}
 
 function validate {
     # if($pwshVersion -cne 'latest') {
@@ -34,6 +44,10 @@ function main {
 
     if($getPwshVersions) {
         ( getPwshVersions ).version
+    }
+
+    if($installPester) {
+        install-module -scope currentuser -force pester
     }
 
     if($compile) {
@@ -69,11 +83,22 @@ function main {
         }
     }
 
-    if($test) {
+    if($test -or $testWindows) {
         write-host 'Testing in Windows'
-        & $winPwsh -noprofile -command { invoke-pester -verbose }
-        write-host 'Testing in Linux via WSL'
-        bash -c "bash -l -c 'pwsh -command invoke-pester'"
+        write-host ('pwsh path: ' + $winPwsh)
+        & $winPwsh -noprofile -file ./test/invoke-pester.ps1
+        if($LASTEXITCODE -ne 0) {throw "Non-zero exit code: $LASTEXITCODE"}
+    }
+    if($test -or $testWsl) {
+        write-host 'Testing in WSL'
+        # bash -l is required to set nvm PATHS
+        bash -c "bash -l -c 'pwsh -noprofile -file ./test/invoke-pester.ps1'"
+        if($LASTEXITCODE -ne 0) {throw "Non-zero exit code: $LASTEXITCODE"}
+    }
+    if($testPosix) {
+        write-host 'Testing in Posix'
+        pwsh -noprofile -file ./test/invoke-pester.ps1
+        if($LASTEXITCODE -ne 0) {throw "Non-zero exit code: $LASTEXITCODE"}
     }
 
     if($prePublish) {
@@ -195,6 +220,11 @@ $oldPwd = $pwd
 Set-Location "$PSScriptRoot/.."
 $oldPath = $env:PATH
 $env:PATH = "$pwd/node_modules/.bin$( [IO.Path]::PathSeparator )$env:PATH"
+# IS THIS BREAKING THINGS???
+get-command node
+get-command npm
+get-command pnpm
+get-command pwsh
 try {
     main
 } finally {

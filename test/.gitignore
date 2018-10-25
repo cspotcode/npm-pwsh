@@ -1,6 +1,0 @@
-.npmrc
-node_modules
-real/npm-prefix
-link-to-npm-prefix-*
-package-lock.json
-package.json

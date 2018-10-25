@@ -6,3 +6,8 @@ wsl-install
 win-install
 test-bin
 get-powershell-*.tgz
+test/real
+test/prefix-link-*
+test/.npmrc
+test/node_modules
+test/package-lock.json

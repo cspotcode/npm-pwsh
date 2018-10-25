@@ -22,8 +22,10 @@ $BoundParamNames = $PSBoundParameters.Keys
 
 $ErrorActionPreference = 'Stop'
 
-$winPwsh = get-command pwsh.cmd -ea continue
-if(-not $winPwsh) { $winPwsh = get-command pwsh.exe }
+if($test -or $testWindows) {
+    $winPwsh = get-command pwsh.cmd -ea continue
+    if(-not $winPwsh) { $winPwsh = get-command pwsh.exe }
+}
 
 function validate {
     # if($pwshVersion -cne 'latest') {

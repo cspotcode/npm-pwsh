@@ -1,3 +1,4 @@
+write-host 'test.ps1: Start'
 $ErrorActionPreference = 'Stop'
 
 # For some reason with -noprofile I have to Get-command to trigger loading
@@ -9,4 +10,6 @@ Get-Command Get-ChildItem > $null
 Get-Command Add-Member > $null
 import-module pester
 
+write-host 'test.ps1: invoking pester'
 invoke-pester -verbose -enableexit
+write-host 'test.ps1: done'

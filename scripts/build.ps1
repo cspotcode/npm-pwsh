@@ -73,22 +73,12 @@ function main {
 
     if($test -or $testWindows) {
         write-host 'Testing in Windows'
-        & $winPwsh -noprofile -command {
-            # For some reason with -noprofile I have to Get-command to trigger loading
-            # of microsoft.powershell.utility and microsoft.powershell.management
-            # Import-Module was not working either; it was trying to load a PowerShell
-            # *Desktop* module, not *Core*.
-            # If we don't do this, pester fails to load
-            Get-Command Get-ChildItem > $null
-            Get-Command Add-Member > $null
-            import-module pester
-            invoke-pester -verbose
-        }
+        & $winPwsh -noprofile -file ./test/test.ps1
         if($LASTEXITCODE -ne 0) {throw "Non-zero exit code: $LASTEXITCODE"}
     }
     if($test -or $testLinux) {
         write-host 'Testing in Linux via WSL'
-        bash -c "bash -l -c 'pwsh -command invoke-pester'"
+        bash -c "bash -l -c 'pwsh -noprofile -file ./test/test.ps1"
     }
 
     if($prePublish) {

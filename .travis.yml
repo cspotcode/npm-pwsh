@@ -25,14 +25,12 @@ jobs:
       os: windows
       script:
         - npm install -g pnpm
-        - powershell -noprofile ./scripts/build.ps1 -compile -package -testWindows
+        - powershell -executionpolicy remotesigned -noprofile ./scripts/build.ps1 -compile -package -testWindows
     - stage: test
       os: mac
       script:
-        - npm install -g pnpm
-        - powershell -noprofile ./scripts/build.ps1 -compile -package -testLinux
+        - ./.travis/test-linux.sh
     - stage: test
       os: linux
       script:
-        - npm install -g pnpm
-        - powershell -noprofile ./scripts/build.ps1 -compile -package -testLinux
+        - ./.travis/test-linux.sh

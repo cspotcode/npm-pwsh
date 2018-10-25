@@ -9,4 +9,4 @@ Get-Command Get-ChildItem > $null
 Get-Command Add-Member > $null
 import-module pester
 
-invoke-pester -verbose
+invoke-pester -verbose -enableexit

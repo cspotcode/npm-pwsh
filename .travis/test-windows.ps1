@@ -1,5 +1,6 @@
 $ErrorActionPreference = 'Stop'
 $VerbosePreference = 'Continue'
+write-host 'test-windows.ps1:'
 # invoke-webrequest https://github.com/PowerShell/PowerShell/releases/download/v6.2.0-preview.1/PowerShell-6.2.0-preview.1-win-x64.zip -outfile pwsh.zip
 # new-item -type directory pwsh
 # expand-archive -path pwsh.zip -outputpath pwsh

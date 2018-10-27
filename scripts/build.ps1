@@ -25,6 +25,7 @@ $ErrorActionPreference = 'Stop'
 if($test -or $testWindows) {
     $winPwsh = get-command pwsh.cmd -ea continue
     if(-not $winPwsh) { $winPwsh = get-command pwsh.exe }
+    $winPwsh = $winPwsh.source
 }
 
 function validate {
@@ -81,7 +82,7 @@ function main {
 
     if($test -or $testWindows) {
         write-host 'Testing in Windows'
-        write-host 'pwsh path: ' + $winPwsh
+        write-host ('pwsh path: ' + $winPwsh)
         & $winPwsh -noprofile -file ./test/test.ps1
         if($LASTEXITCODE -ne 0) {throw "Non-zero exit code: $LASTEXITCODE"}
     }

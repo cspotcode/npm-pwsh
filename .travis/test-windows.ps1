@@ -12,5 +12,5 @@ $env:Path = "$(Get-Location)/pwsh;" + $env:Path
 write-output '$env:Path ='
 write-output ($env:Path -split ';')
 npm install -g pnpm
-pwsh -executionpolicy remotesigned -noprofile ./scripts/build.ps1 -installPester -compile -package -testWindows
+pwsh -executionpolicy remotesigned -noprofile ./scripts/build.ps1 -installPester -compile -package -testWindows -winPwsh "$(Get-location)/pwsh/pwsh"
 exit $LASTEXITCODE

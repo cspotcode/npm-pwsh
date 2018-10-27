@@ -16,13 +16,14 @@ param(
     <# update CHANGELOG for next version #>
     [switch] $postPublish,
     [string[]] $parseVersion,
-    [switch] $dryrun
+    [switch] $dryrun,
+    [string]$winPwsh
 )
 $BoundParamNames = $PSBoundParameters.Keys
 
 $ErrorActionPreference = 'Stop'
 
-if($test -or $testWindows) {
+if(($test -or $testWindows) -and (-not $winPwsh)) {
     $winPwsh = get-command pwsh.cmd -ea continue
     if(-not $winPwsh) { $winPwsh = get-command pwsh.exe }
     $winPwsh = $winPwsh.source

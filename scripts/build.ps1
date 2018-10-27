@@ -81,6 +81,7 @@ function main {
 
     if($test -or $testWindows) {
         write-host 'Testing in Windows'
+        write-host 'pwsh path: ' + $winPwsh
         & $winPwsh -noprofile -file ./test/test.ps1
         if($LASTEXITCODE -ne 0) {throw "Non-zero exit code: $LASTEXITCODE"}
     }

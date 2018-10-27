@@ -1,5 +1,6 @@
 write-host 'test.ps1: Start'
 $ErrorActionPreference = 'Stop'
+$VerbosePreference = 'Continue'
 
 # For some reason with -noprofile I have to Get-command to trigger loading
 # of microsoft.powershell.utility and microsoft.powershell.management

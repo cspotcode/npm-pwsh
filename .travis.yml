@@ -12,6 +12,7 @@
 # requested version: latest, beta7
 # fake powershell is preinstalled: true, false
 
+sudo: false
 language: node_js
 node_js:
   - "10"

@@ -6,7 +6,7 @@ Alternatively, install it globally for a super-simple powershell installation.
 
 ## Why?
 
-I prefer PowerShell to bash for quickly writing npm scripts. (opinion)  However, I can't expect collaborators to have it installed.*  Adding `"get-powershell"` as a `"devDependency"` solves that problem without any extra effort.
+I prefer PowerShell to bash for quickly writing npm scripts. (opinion)  However, I can't expect collaborators to have it installed.*  Adding `"pwsh"` as a `"devDependency"` solves that problem without any extra effort.
 
 *\* Even on Windows, "Windows PowerShell" is preinstalled but we want to use `pwsh` / PowerShell Core, the cross-platform, more up-to-date edition of PowerShell.*
 
@@ -15,16 +15,16 @@ I prefer PowerShell to bash for quickly writing npm scripts. (opinion)  However,
 If you just want to use `pwsh` for your npm scripts, add us as a devDependency:
 
 ```
-npm install --save-dev get-powershell
+npm install --save-dev pwsh
 ```
 
 If you want `pwsh` to be globally available as an interactive shell:
 
 ```
-npm install --global get-powershell
+npm install --global pwsh
 ```
 
-All installations are shared, so you can depend on "get-powershell" in many projects without downloading multiple copies of `pwsh`.  See the FAQ for details.
+All installations are shared, so you can depend on "pwsh" in many projects without downloading multiple copies of `pwsh`.  See the FAQ for details.
 
 ## Example
 
@@ -32,8 +32,8 @@ All installations are shared, so you can depend on "get-powershell" in many proj
 // Example package.json
 {
     "devDependencies": {
-        // Use the latest get-powershell to install pwsh 6.0.4
-        "get-powershell": "pwsh6.0.4"
+        // Use the latest get-powershell/pwsh to install pwsh 6.0.4
+        "pwsh": "pwsh6.0.4"
     },
     "scripts": {
         "test": "pwsh -NoProfile ./scripts/test.ps1"
@@ -62,16 +62,16 @@ ls # shows all the versions installed
 ```
 
 Installations are cached and shared, so if you work on 5 different projects that all depend
-on "get-powershell", only a single copy of `pwsh` will be downloaded.  Subsequent `npm install`s should be very fast, merely creating a symlink at "./node_modules/.bin/pwsh".
+on "pwsh", only a single copy of `pwsh` will be downloaded.  Subsequent `npm install`s should be very fast, merely creating a symlink at "./node_modules/.bin/pwsh".
 
 PowerShell Core is about 50MB to download; 127MB extracted.
 
 ### How do I install a specific version of pwsh?
 
-By default we install the latest version of PowerShell Core.  To install a specific version, check the [dist-tags](https://www.npmjs.com/package/get-powershell?activeTab=versions) and install the one you want.
+By default we install the latest version of PowerShell Core.  To install a specific version, check the [dist-tags](https://www.npmjs.com/package/pwsh?activeTab=versions) and install the one you want.
 
 ```
-npm install get-powershell@pwsh6.0.4
+npm install pwsh@pwsh6.0.4
 ```
 
 *Remember, npm dist-tags !== npm versions.

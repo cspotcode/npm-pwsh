@@ -6,3 +6,4 @@ wsl-install
 win-install
 test-bin
 get-powershell-*.tgz
+pwsh-*.tgz

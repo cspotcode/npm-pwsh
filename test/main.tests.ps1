@@ -7,8 +7,8 @@ $IsPosix = $IsMacOS -or $IsLinux
 
 $pathSep = if($IsPosix) { ':' } else { ';' }
 $dirSep = if($IsPosix) { '/' } else { '\' }
-$tgz = get-item $PSScriptRoot/../get-powershell-*.tgz
-# $fromTgz = get-item $PSScriptRoot/../get-powershell-*.tgz
+$tgz = get-item $PSScriptRoot/../pwsh-*.tgz
+# $fromTgz = get-item $PSScriptRoot/../pwsh-*.tgz
 # $tgz = "./this-is-the-tgz.tgz"
 # remove-item $tgz -ea continue
 # move-item $fromTgz $tgz
@@ -122,7 +122,7 @@ Describe 'get-powershell' {
             }
             it 'pwsh is in path and is correct version' {
                 (get-command pwsh).source | should -belike "$npmLocalInstallPath*"
-                
+
                 if($pwshVersion -ne 'latest') {
                     pwsh --version | should -be "PowerShell v$pwshVersion"
                 }
@@ -140,7 +140,7 @@ Describe 'get-powershell' {
             }
             it 'pwsh is in path and is correct version' {
                 (get-command pwsh).source | should -belike "$npmLocalInstallPath*"
-                
+
                 if($pwshVersion -ne 'latest') {
                     pwsh --version | should -be "PowerShell v$pwshVersion"
                 }

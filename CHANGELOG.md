@@ -12,13 +12,13 @@
 
 # v0.0.8
 
-* Adds support for prerelease versions of pwsh, installable via `npm i get-powershell@prerelease`.
+* Adds support for prerelease versions of pwsh, installable via `npm i pwsh@prerelease`.
 * Adds pwsh v6.1.0-rc.1.
 
 # v0.0.7
 
 * Adds automated tests.
-* Fix issue where npm would refuse to remove the installed symlinks / cmd shims when you `npm uninstall get-powershell`
+* Fix issue where npm would refuse to remove the installed symlinks / cmd shims when you `npm uninstall pwsh`
 * Fix problem `npm install`ing a fresh git clone (only affects contributors, not consumers)
 * Switch to cross-spawn; fixes bug globally installing on Windows.
 

@@ -7,7 +7,7 @@ $IsPosix = $IsMacOS -or $IsLinux
 
 $pathSep = if($IsPosix) { ':' } else { ';' }
 $dirSep = if($IsPosix) { '/' } else { '\' }
-$tgz = get-item $PSScriptRoot/../pwsh-*.tgz
+$tgz = "../$((get-item $PSScriptRoot/../pwsh-*.tgz).name)"
 # $fromTgz = get-item $PSScriptRoot/../pwsh-*.tgz
 # $tgz = "./this-is-the-tgz.tgz"
 # remove-item $tgz -ea continue
@@ -18,21 +18,38 @@ $pwshVersion = (get-content $PSScriptRoot/../dist/buildTags.json | convertfrom-j
 $npm = (Get-Command npm).Source
 $pnpm = (Get-Command pnpm).Source
 
-$winPwsh = get-command pwsh.cmd -ea continue
-if(-not $winPwsh) { $winPwsh = get-command pwsh.exe }
+if($IsWindows) {
+    $winPwsh = (get-command pwsh.cmd -ea continue).path
+    if(-not $winPwsh) { $winPwsh = (get-command pwsh.exe).path }
+}
 
 Describe 'get-powershell' {
+    $oldLocation = Get-Location
+    Set-Location $PSScriptRoot
+    $npmPrefixRealpath = "$( get-location )$( if($IsPosix) { '/real/npm-prefix-linux' } else { '\real\npm-prefix-windows' } )"
+    $npmPrefixSymlink = "$( get-location )$( if($IsPosix) { '/link-to-npm-prefix-linux' } else { '\link-to-npm-prefix-windows' } )"
+    $npmGlobalInstallPath = "$npmPrefixSymlink$( if($IsPosix) { '/bin' } else { '' } )"
+    $npmLocalInstallPath = "$PSScriptRoot$( $dirSep )node_modules$( $dirSep ).bin"
+
     BeforeEach {
         <### HELPER FUNCTIONS ###>
         function run($block) {
             & $block
             if($lastexitcode -ne 0) { throw "Non-zero exit code: $LASTEXITCODE" }
         }
-        Function npm {
-            & $npm --userconfig "$PSScriptRoot/.npmrc" @args | write-host
+        Function npm([switch]$show) {
+            if($show) {
+                & $npm --userconfig "$PSScriptRoot/.npmrc" @args 2>&1 | write-host
+            } else {
+                & $npm --userconfig "$PSScriptRoot/.npmrc" @args
+            }
         }
-        Function pnpm {
-            & $pnpm --userconfig "$PSScriptRoot/.npmrc" @args | write-host
+        Function pnpm([switch]$show) {
+            if($show) {
+                & $pnpm --userconfig "$PSScriptRoot/.npmrc" @args 2>&1 | write-host
+            } else {
+                & $pnpm --userconfig "$PSScriptRoot/.npmrc"
+            }
         }
         Function retry($times, $delay, $block) {
             while($times) {
@@ -50,29 +67,25 @@ Describe 'get-powershell' {
         }
         # Create a symlink.  On Windows this requires popping a UAC prompt (ugh)
         Function symlink($from, $to) {
+            write-host $from $to
+            write-host (get-item $from)
+            write-host (get-item $from).target
+            if((get-item $from).target -eq $to) { return }
             if($IsPosix) {
                 new-item -type symboliclink -path $from -Target $to -EA Stop
             }
             else {
                 start-process -verb runas -wait $winPwsh -argumentlist @(
-                    '-noprofile', '-c', {
-                        param($from, $to)
-                        echo new-item -type symboliclink -path $npmSymlinkPrefix -Target $npmRealpathPrefix -EA Stop
-                    }, $from, $to
-                )
+                    '-noprofile', '-file', "$PSScriptRoot/create-symlink.ps1",
+                    $from, $to
+                ) -erroraction stop
             }
         }
 
         <### SETUP ENVIRONMENT ###>
 
-        $oldLocation = Get-Location
-        Set-Location $PSScriptRoot
         # Add node_modules/.bin to PATH; remove any paths containing pwsh.exe
         $oldPath = $env:PATH
-        $npmRealpathPrefix = "$( get-location )$( if($IsPosix) { '/real/npm-prefix' } else { '\real\npm-prefix' } )"
-        $npmSymlinkPrefix = "$( get-location )$( if($IsPosix) { '/link-to-npm-prefix-linux' } else { '\link-to-npm-prefix-windows' } )"
-        $npmGlobalInstallPath = "$npmSymlinkPrefix$( if($IsPosix) { '/bin' } else { '' } )"
-        $npmLocalInstallPath = "$PSScriptRoot$( $dirSep )node_modules$( $dirSep ).bin"
         $env:PATH = (& {
             # Local bin
             $npmLocalInstallPath
@@ -88,11 +101,11 @@ Describe 'get-powershell' {
         if(test-path ./node_modules) {
             remove-item -recurse ./node_modules -force
         }
-        if(test-path ./real/npm-prefix) {
-            remove-item -recurse ./real/npm-prefix -force
+        if(test-path $npmPrefixRealpath) {
+            remove-item -recurse $npmPrefixRealpath -force
         }
-        new-item -type directory $npmRealpathPrefix
-        symlink $npmSymlinkPrefix $npmRealpathPrefix
+        new-item -type directory $npmPrefixRealpath
+        symlink $npmPrefixSymlink $npmPrefixRealpath
         set-content ./.npmrc -encoding utf8 "prefix = $($npmPrefix -replace '\\','\\')"
 
         $preexistingPwsh = get-command pwsh -EA SilentlyContinue
@@ -100,21 +113,22 @@ Describe 'get-powershell' {
 
     }
     AfterEach {
-        Set-Location $oldLocation
-        if($IsPosix) { Remove-Item -Path $npmSymlinkPrefix }
-        else { Remove-Item -Path $npmSymlinkPrefix }
+        # if($IsPosix) { Remove-Item -Path $npmPrefixSymlink }
+        # Never delete the symlink on Windows.  It's too annoying to create in the first place
+        # else { Remove-Item -Path $npmPrefixSymlink }
         $env:PATH = $oldPath
     }
 
-    it 'Symlink exists (it requires admin privileges to create on windows and isnt done automatically)' {
-        write-host ">>$npmSymlinkPrefix"
-        Get-Item $npmSymlinkPrefix
-    }
-
     $tests = {
+
+        it 'Symlink exists (it requires admin privileges to create on windows and isnt done automatically)' {
+            Get-Item $npmPrefixSymlink
+        }
+
         it 'npm prefix set correctly for testing' {
             run { npm config get prefix } | should -be $npmPrefix
         }
+
 
         describe 'local installation via npm' {
             beforeeach {
@@ -129,14 +143,12 @@ Describe 'get-powershell' {
             }
             aftereach {
                 run { npm uninstall $tgz }
-                write-host 'deleting node_modules'
                 retry 4 1 { remove-item -r node_modules }
-                write-host 'deleted node_modules'
             }
         }
         describe 'local installation via pnpm' {
             beforeeach {
-                run { pnpm install $tgz }
+                run { pnpm -show install $tgz }
             }
             it 'pwsh is in path and is correct version' {
                 (get-command pwsh).source | should -belike "$npmLocalInstallPath*"
@@ -146,7 +158,7 @@ Describe 'get-powershell' {
                 }
             }
             aftereach {
-                run { pnpm uninstall $tgz }
+                # run { pnpm -show uninstall $tgz }
                 write-host 'deleting node_modules'
                 retry 4 1 { remove-item -r node_modules }
                 write-host 'deleted node_modules'
@@ -154,7 +166,7 @@ Describe 'get-powershell' {
         }
         describe 'global installation' {
             beforeeach {
-                run { npm install --global $tgz }
+                run { npm -show install --global $tgz }
             }
             it 'pwsh is in path and is correct version' {
                 (get-command pwsh).source | should -belike "$npmGlobalInstallPath*"
@@ -164,17 +176,20 @@ Describe 'get-powershell' {
                 }
             }
             aftereach {
-                run { npm uninstall --global $tgz }
+                run { npm -show uninstall --global $tgz }
             }
         }
     }
 
+    $npmPrefix = $npmPrefixSymlink
     describe 'npm prefix is symlink' {
-        $npmPrefix = $npmSymlinkPrefix
         . $tests
     }
+
+    $npmPrefix = $npmPrefixRealpath
     describe 'npm prefix is realpath' {
-        $npmPrefix = $npmRealpathPrefix
         . $tests
     }
+
+    Set-Location $oldLocation
 }

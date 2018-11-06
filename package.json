@@ -1,7 +1,7 @@
 {
   "name": "pwsh",
-  "version": "0.1.1",
-  "description": "Automatically downloads and extracts PowerShell Core, allowing you to use it in NPM scripts and node projects even with Linux and Mac developers.",
+  "version": "0.2.0",
+  "description": "Install PowerShell Core via npm, allowing you to use it in npm scripts and node projects.",
   "bin": {
     "pwsh": "./bin/pwsh"
   },

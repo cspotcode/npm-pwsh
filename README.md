@@ -1,6 +1,6 @@
 # pwsh
 
-Install PowerShell Core via npm.
+Install PowerShell Core via npm, allowing you to use it in npm scripts and node projects.
 
 We support both global and local npm installations, and we use a shared cache to avoid downloading duplicate copies of the full `pwsh` distribution.  This means you can install us as a *local* dev dependency in dozens of projects, and the installation process will quickly create a symlink to the cache.
 

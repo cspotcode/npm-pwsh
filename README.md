@@ -2,15 +2,15 @@
 
 Install PowerShell Core via npm, allowing you to use it in npm scripts and node projects.
 
-We support both global and local npm installations, and we use a shared cache to avoid downloading duplicate copies of the full `pwsh` distribution.  This means you can install us as a *local* dev dependency in dozens of projects, and the installation process will quickly create a symlink to the cache.
-
-`npm i -g pwsh` may be the easiest way to get started with PowerShell Core.  It's also worth noting, Windows only comes preinstalled with PowerShell Desktop, which is an aging version of PowerShell that isn't receiving updates.  All new development is focused on the open-source, cross-platform PowerShell Core, so I recommend switching to it.
+`npm i -g pwsh` may be the easiest way to get started with PowerShell Core on any platform.
 
 ## Why?
 
 I prefer PowerShell to bash for quickly writing npm scripts. (opinion)  However, I can't expect collaborators to have it installed.*  Adding `"pwsh"` as a `"devDependency"` solves that problem without any extra effort.
 
-*\* Even on Windows, "Windows PowerShell" is preinstalled but we want to use `pwsh` / PowerShell Core, the cross-platform, more up-to-date edition of PowerShell.*
+We support both global and local npm installations, and we use a shared cache to avoid downloading duplicate copies of the full `pwsh` distribution.  This means you can install us as a *local* dev dependency in dozens of projects, and the installation process will quickly create a symlink to the cache.
+
+*\* Even on Windows, the aging "Windows PowerShell" is preinstalled but we want to use `pwsh` / PowerShell Core, the cross-platform, more up-to-date edition of PowerShell.*
 
 ## Usage
 

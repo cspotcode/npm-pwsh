@@ -72,10 +72,11 @@ Function retry($times, $delay, $block) {
 }
 # Create a symlink.  On Windows this requires popping a UAC prompt (ugh)
 Function symlink($from, $to) {
+    if((get-item $from).target -eq $to) {
+        write-host "Symlink already exists: $from --> $to"
+        return
+    }
     write-host "Symlinking $from --> $to"
-    write-host (get-item $from)
-    write-host (get-item $from).target
-    if((get-item $from).target -eq $to) { return }
     if($IsPosix) {
         new-item -type symboliclink -path $from -Target $to -EA Stop
     }
@@ -133,14 +134,13 @@ Describe 'pwsh' {
 
     $tests = {
 
-        it 'Symlink exists (it requires admin privileges to create on windows and isnt done automatically)' {
-            Get-Item $npmPrefixSymlink
+        it 'npm prefix symlink exists' {
+            (Get-Item $npmPrefixSymlink).attributes -eq 'symboliclink'
         }
 
         it 'npm prefix set correctly for testing' {
             run { npm config get prefix } | should -be $npmPrefix
         }
-
 
         describe 'local installation via npm' {
             beforeeach {

@@ -5,9 +5,10 @@ src__defunct__
 wsl-install
 win-install
 test-bin
-get-powershell-*.tgz
+pwsh-*.tgz
 test/real
 test/prefix-link-*
 test/.npmrc
+test/shrinkwrap.yaml
 test/node_modules
 test/package-lock.json

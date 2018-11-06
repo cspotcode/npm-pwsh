@@ -1,7 +1,13 @@
+# v0.2.0
+
+* Add Powershell 6.2.0-preview.1
+* Rename to `pwsh` (git repo `npm-pwsh`)
+* Fix compatibility with pnpm [#14](https://github.com/cspotcode/npm-pwsh/issues/14)
+
 # v0.1.1
 
-* Avoid repeated, unnecessary package extractions on Windows.  [#11](https://github.com/cspotcode/npm-get-powershell/issues/11)
-* Fix support for symlinked npm prefix.  This affects users of nvs; possibly others.  [#9](https://github.com/cspotcode/npm-get-powershell/issues/9)
+* Avoid repeated, unnecessary package extractions on Windows.  [#11](https://github.com/cspotcode/npm-pwsh/issues/11)
+* Fix support for symlinked npm prefix.  This affects users of nvs; possibly others.  [#9](https://github.com/cspotcode/npm-pwsh/issues/9)
 
 # v0.1.0
 
@@ -12,13 +18,13 @@
 
 # v0.0.8
 
-* Adds support for prerelease versions of pwsh, installable via `npm i get-powershell@prerelease`.
+* Adds support for prerelease versions of pwsh, installable via `npm i pwsh@prerelease`.
 * Adds pwsh v6.1.0-rc.1.
 
 # v0.0.7
 
 * Adds automated tests.
-* Fix issue where npm would refuse to remove the installed symlinks / cmd shims when you `npm uninstall get-powershell`
+* Fix issue where npm would refuse to remove the installed symlinks / cmd shims when you `npm uninstall pwsh`
 * Fix problem `npm install`ing a fresh git clone (only affects contributors, not consumers)
 * Switch to cross-spawn; fixes bug globally installing on Windows.
 

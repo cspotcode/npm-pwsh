@@ -1,5 +1,5 @@
 {
-  "name": "get-powershell",
+  "name": "pwsh",
   "version": "0.1.1",
   "description": "Automatically downloads and extracts PowerShell Core, allowing you to use it in NPM scripts and node projects even with Linux and Mac developers.",
   "bin": {
@@ -13,11 +13,11 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cspotcode/npm-get-powershell.git"
+    "url": "https://github.com/cspotcode/npm-pwsh.git"
   },
-  "homepage": "https://github.com/cspotcode/npm-get-powershell",
+  "homepage": "https://github.com/cspotcode/npm-pwsh",
   "bugs": {
-    "url": "https://github.com/cspotcode/npm-get-powershell/issues"
+    "url": "https://github.com/cspotcode/npm-pwsh/issues"
   },
   "keywords": [
     "PowerShell",

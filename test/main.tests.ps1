@@ -7,8 +7,8 @@ $IsPosix = $IsMacOS -or $IsLinux
 
 $pathSep = if($IsPosix) { ':' } else { ';' }
 $dirSep = if($IsPosix) { '/' } else { '\' }
-$tgz = "../$((get-item $PSScriptRoot/../get-powershell-*.tgz).name)"
-# $fromTgz = get-item $PSScriptRoot/../get-powershell-*.tgz
+$tgz = "../$((get-item $PSScriptRoot/../pwsh-*.tgz).name)"
+# $fromTgz = get-item $PSScriptRoot/../pwsh-*.tgz
 # $tgz = "./this-is-the-tgz.tgz"
 # remove-item $tgz -ea continue
 # move-item $fromTgz $tgz
@@ -87,7 +87,7 @@ Function symlink($from, $to) {
     }
 }
 
-Describe 'get-powershell' {
+Describe 'pwsh' {
     $oldLocation = Get-Location
     Set-Location $PSScriptRoot
     BeforeEach {

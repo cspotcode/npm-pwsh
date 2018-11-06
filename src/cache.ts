@@ -16,10 +16,10 @@ export interface CacheManifestEntry {
  */
 export function getCacheInstallDirectory(machine: Pick<NodeJS.Process, 'platform'> = process): string {
     if(isGlobalInstall) {
-        return Path.join(getNpmGlobalNodeModules(), '@cspotcode/get-powershell-cache');
+        return Path.join(getNpmGlobalNodeModules(), '@cspotcode/pwsh-cache');
         // TODO should cache in NPM_PREFIX for --global installations
     } else {
-        return Path.join(os.homedir(), '.npm-get-powershell');
+        return Path.join(os.homedir(), '.npm-pwsh');
     }
 }
 

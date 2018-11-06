@@ -178,7 +178,9 @@ function main {
             }
         } |
         ? {
-            $_.platform -match 'win|osx|linux' -and $_.extension -match '\.tar\.gz|\.zip' -and $_.arch -match 'x86|x64'
+            try {
+                $_.platform -match 'win|osx|linux' -and $_.extension -match '\.tar\.gz|\.zip' -and $_.arch -match 'x86|x64'
+            } catch {$false}
         } |
         % {
             $_.arch = @{ x64 = 'x64'; x86 = 'ia32'; }.($_.arch);
@@ -220,11 +222,6 @@ $oldPwd = $pwd
 Set-Location "$PSScriptRoot/.."
 $oldPath = $env:PATH
 $env:PATH = "$pwd/node_modules/.bin$( [IO.Path]::PathSeparator )$env:PATH"
-# IS THIS BREAKING THINGS???
-get-command node
-get-command npm
-get-command pnpm
-get-command pwsh
 try {
     main
 } finally {

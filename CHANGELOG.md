@@ -1,10 +1,11 @@
-# vNEXT
+# v0.3.0
 
 * Move tests from Pester to mocha
 * Move from TravisCI to Github Actions
 * Tweak publishing workflow
 * Improve version parsing script to pull and parse all releases from Github's API.
-* Add many more pwsh versions, including arm and arm64
+* Add many more pwsh versions
+* Add arm and arm64 pwsh packages
 
 # v0.2.0
 

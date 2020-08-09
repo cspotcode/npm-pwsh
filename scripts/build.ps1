@@ -161,8 +161,8 @@ function main {
     if($publishPackages) {
         get-childitem packages | % {
             $name = $_.name
-            (select-string -inputobject $name -pattern 'package-(.*).tgz').matches.groups[1].value
-            echo npm publish --tag $distTag packages/$name
+            $distTag = (select-string -inputobject $name -pattern 'package-(.*).tgz').matches.groups[1].value
+            run { npm publish --tag $distTag ./packages/$name }
         }
     }
 

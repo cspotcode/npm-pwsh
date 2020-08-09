@@ -9,7 +9,7 @@ import * as tar from 'tar';
 import { Readable } from 'stream';
 import { platform } from 'os';
 import * as unzipper from 'unzipper';
-import * as cmdShim from 'cmd-shim';
+import * as cmdShim from '@zkochan/cmd-shim';
 import { promisify } from 'util';
 import { Extension } from './version-utils';
 import * as stream from 'stream';
@@ -263,7 +263,7 @@ export async function createSymlinkTo(args: {
     // Windows platforms: use cmd-shim
     if(process.platform === 'win32') {
         log(`Creating .cmd shim from ${ linkPath } to ${ targetPath } (via ${ intermediateLinkPath })...`);
-        await promisify(cmdShim)(targetPath, intermediateLinkPath.replace(/\.cmd$/, ''));
+        await promisify(cmdShim)(targetPath, intermediateLinkPath.replace(/\.cmd$/, ''), {});
     }
     // Non-windows platforms: use a symlink to a symlink
     // Intermediate symlink is necessary because npm refuses to delete .bin/<symlink> unless it points to *within* the module's directory

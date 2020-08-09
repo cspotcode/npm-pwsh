@@ -1,0 +1,42 @@
+# Requirements:
+# A build on Linux
+# A build on Mac
+# Package into a tarball
+# Install with latest version, check "powershell -version"
+# Install with requested older version, check "powershell -version"
+# Preinstall powershell (or a fake powershell binary), install with latest version, make sure it skips installation but exposed powershell on path
+# Preinstall powershell (or a fake powershell binary), install with requested older version, make sure it skips installation but exposed powershell on path
+
+# Matrix:
+# os: linux, mac
+# requested version: latest, beta7
+# fake powershell is preinstalled: true, false
+
+name: Continuous
+on: [pull_request]
+
+jobs:
+  testWindows:
+    name: Test on Windows
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+      - name: Test
+        run: pwsh -executionpolicy remotesigned -noprofile ./.github/test-windows.ps1
+  testLinux:
+    name: Test on Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+      - name: Test
+        run: ./.github/test.sh linux
+  testMac:
+    name: Test on Mac
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v2
+        name: Checkout
+      - name: Test
+        run: ./.github/test.sh osx

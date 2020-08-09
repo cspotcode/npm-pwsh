@@ -12,3 +12,5 @@ test/.npmrc
 test/shrinkwrap.yaml
 test/node_modules
 test/package-lock.json
+.vscode
+pwsh

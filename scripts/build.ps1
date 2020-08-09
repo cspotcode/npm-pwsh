@@ -1,6 +1,5 @@
+#!/usr/bin/env pwsh
 param(
-    <# install pester on CI #>
-    [switch] $installPester,
     <# compile TS and bundle via webpack #>
     [switch] $compile,
     [switch] $package,
@@ -25,10 +24,12 @@ $BoundParamNames = $PSBoundParameters.Keys
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
+. "$PSScriptRoot/helpers.ps1"
+
 if(($test -or $testWindows) -and (-not $winPwsh)) {
-    $winPwsh = get-command pwsh.cmd -ea continue
-    if(-not $winPwsh) { $winPwsh = get-command pwsh.exe }
-    $winPwsh = $winPwsh.source
+    $winPwshCmd = get-command pwsh.cmd -ea SilentlyContinue
+    if(-not $winPwshCmd) { $winPwshCmd = get-command pwsh.exe }
+    $winPwsh = $winPwshCmd.source
 }
 
 function validate {
@@ -46,15 +47,20 @@ function main {
         ( getPwshVersions ).version
     }
 
-    if($installPester) {
-        install-module -scope currentuser -force pester
-    }
-
     if($compile) {
-        echo out dist | % { (test-path $_) -and (rm -recurse $_) } | out-null
+        write-host '----cleaning----'
+        Write-Output out dist | % { (test-path $_) -and (Remove-Item -recurse $_) } | out-null
+        write-host '----tsc----'
         run { tsc -p . }
-        run { webpack }
-        cp ./out/__root.js ./dist/
+        write-host '----webpack----'
+        try {
+            run { webpack }
+        } catch {
+            write-output $_
+        }
+        write-host '----copying----'
+        Copy-Item ./out/__root.js ./dist/
+        write-host '----done compiling----'
     }
 
     function forEachPwshVersion($pwshVersions, $action) {
@@ -86,18 +92,18 @@ function main {
     if($test -or $testWindows) {
         write-host 'Testing in Windows'
         write-host ('pwsh path: ' + $winPwsh)
-        & $winPwsh -noprofile -file ./test/invoke-pester.ps1
+        & ./node_modules/.bin/mocha.cmd
         if($LASTEXITCODE -ne 0) {throw "Non-zero exit code: $LASTEXITCODE"}
     }
     if($test -or $testWsl) {
-        write-host 'Testing in WSL'
+        write-host 'Testing in WSL (should be invoked from Windows)'
         # bash -l is required to set nvm PATHS
-        bash -c "bash -l -c 'pwsh -noprofile -file ./test/invoke-pester.ps1'"
+        bash -c "bash -l -c './node_modules/.bin/mocha'"
         if($LASTEXITCODE -ne 0) {throw "Non-zero exit code: $LASTEXITCODE"}
     }
     if($testPosix) {
-        write-host 'Testing in Posix'
-        pwsh -noprofile -file ./test/invoke-pester.ps1
+        write-host 'Testing in Posix (should be invoked from within Linux, Mac, or WSL)'
+        ./node_modules/.bin/mocha
         if($LASTEXITCODE -ne 0) {throw "Non-zero exit code: $LASTEXITCODE"}
     }
 
@@ -200,22 +206,6 @@ function getPwshVersions {
 '@
     } | convertfrom-json
     $versions
-}
-
-function readfile($path) {
-    ,(get-content -raw -encoding utf8 -path $path)
-}
-function writefile {
-    param(
-        $path,
-        [Parameter(valuefrompipeline)] $content
-    )
-    [IO.File]::WriteAllText(($path | resolve-path), $content)
-}
-
-function run($block) {
-    & $block
-    if($LASTEXITCODE -ne 0) { throw "Non-zero exit code: $LASTEXITCODE" }
 }
 
 $oldPwd = $pwd

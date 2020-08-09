@@ -1,7 +1,8 @@
-# UNTITLED
+# vNEXT
 
 * Move tests from Pester to mocha
 * Move from TravisCI to Github Actions
+* Tweak publishing workflow
 
 # v0.2.0
 

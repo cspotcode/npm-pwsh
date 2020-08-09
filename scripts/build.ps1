@@ -2,17 +2,20 @@
 param(
     <# compile TS and bundle via webpack #>
     [switch] $compile,
-    [switch] $package,
+    [switch] $packageForTests,
     [switch] $test,
     [switch] $testWindows,
     [switch] $testWsl,
     [switch] $testPosix,
     [switch] $getPwshVersions,
     <# `npm version` and prepare CHANGELOG for new version #>
-    [switch] $prePublish,
+    [switch] $prepareVersion,
     [string] $npmVersionFlag,
+    [switch] $version,
+    # <# create all packages to be published to npm #>
+    [switch] $packageForPublishing,
     # <# npm publish all tags #>
-    [switch] $publish,
+    [switch] $publishPackages,
     <# update CHANGELOG for next version #>
     [switch] $postPublish,
     [string[]] $parseVersion,
@@ -83,7 +86,7 @@ function main {
         }
     }
 
-    if($package) {
+    if($packageForTests) {
         forEachPwshVersion @('latest') {
             run { npm pack }
         }
@@ -107,7 +110,7 @@ function main {
         if($LASTEXITCODE -ne 0) {throw "Non-zero exit code: $LASTEXITCODE"}
     }
 
-    if($prePublish) {
+    if($prepareVersion) {
         if(-not ($BoundParamNames -contains 'npmVersionFlag')) { throw "must pass -npmVersionFlag" }
         write-host 'bumping npm version'
         run { npm version --no-git-tag-version --allow-same-version $npmVersionFlag }
@@ -115,17 +118,10 @@ function main {
         run { git add package.json }
         write-host 'preparing changelog...'
         writefile CHANGELOG.md ((readfile CHANGELOG.md) -replace 'vNEXT',"v$npmVersion")
-        write-host 'Update and `git add` changelog.  Make sure package.json version is accurate.  Then run publish.'
+        write-host 'Update and `git add` changelog.  Make sure package.json version is accurate.  Then run -version, -packageForPublish, -publishPackages, and finally -postPublish.'
     }
 
-    if($publish) {
-
-        $pwshVersions = & {
-            'latest'
-            'prerelease'
-            ( getPwshVersions ).version
-        }
-        $pwshVersions
+    if($version) {
         $npmBaseVersion = ( readfile package.json | convertfrom-json ).version
         write-host "Creating version commit and tag for $npmBaseVersion"
         if(-not $dryrun) {
@@ -133,21 +129,42 @@ function main {
             run { git commit -m "v$npmBaseVersion" --allow-empty }
             run { git tag "v$npmBaseVersion" }
         }
+    }
+
+    if($packageForPublishing) {
+        $pwshVersions = & {
+            'latest'
+            'prerelease'
+            ( getPwshVersions ).version
+        }
+        $pwshVersions
+        $npmBaseVersion = ( readfile package.json | convertfrom-json ).version
         write-host "npmBaseVersion: $npmBaseVersion"
+        if(test-path packages) { remove-item -Recurse packages }
+        new-item -type directory packages
         forEachPwshVersion $pwshVersions {
             write-host ''
-            Write-host 'PUBLISHING:'
+            Write-host 'PACKAGING:'
             write-host "npm version: $npmVersion"
             write-host "npm dist-tag: $distTag"
             write-host "pwsh version: $pwshVersion"
             write-host "buildTags.json: $(readfile ./dist/buildTags.json)"
             if(-not $dryrun) {
                 run { npm version --no-git-tag-version $npmVersion --allow-same-version }
-                run { npm publish --tag $buildTags.distTag }
+                run { npm pack }
+                move-item *.tgz packages/package-$distTag.tgz
             }
             write-host '-----'
         }
         run { npm version --no-git-tag-version $npmBaseVersion --allow-same-version }
+    }
+
+    if($publishPackages) {
+        get-childitem packages | % {
+            $name = $_.name
+            (select-string -inputobject $name -pattern 'package-(.*).tgz').matches.groups[1].value
+            echo npm publish --tag $distTag packages/$name
+        }
     }
 
     if($postPublish) {

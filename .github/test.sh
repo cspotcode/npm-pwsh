@@ -37,4 +37,4 @@ which npm
 which pnpm
 which pwsh
 
-pwsh -noprofile ./scripts/build.ps1 -compile -package -testPosix
+pwsh -noprofile ./scripts/build.ps1 -compile -packageForTests -testPosix

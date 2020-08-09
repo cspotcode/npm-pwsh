@@ -28,5 +28,5 @@ write-host 'BINARY PATHS:'
 (get-command pwsh).Path
 
 # Run tests
-pwsh -executionpolicy remotesigned -noprofile .\scripts\build.ps1 -compile -package -testWindows -winPwsh "$(Get-Location)\pwsh\pwsh.exe"
+pwsh -executionpolicy remotesigned -noprofile .\scripts\build.ps1 -compile -packageForTests -testWindows -winPwsh "$(Get-Location)\pwsh\pwsh.exe"
 exit $LASTEXITCODE

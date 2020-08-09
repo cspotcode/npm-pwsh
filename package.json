@@ -30,6 +30,9 @@
     "tar": "^4.1.1"
   },
   "devDependencies": {
+    "@octokit/core": "^3.1.2",
+    "@octokit/plugin-paginate-rest": "^2.3.0",
+    "@octokit/plugin-rest-endpoint-methods": "^4.1.2",
     "@types/cross-spawn": "^6.0.0",
     "@types/get-stream": "^3.0.1",
     "@types/mkdirp": "^0.5.1",
@@ -38,6 +41,7 @@
     "@types/request": "^2.0.4",
     "@types/request-promise": "^4.1.38",
     "@types/rimraf": "^3.0.0",
+    "@types/semver": "^7.3.1",
     "@types/tar": "^4.0.0",
     "@types/unzipper": "^0.8.4",
     "@types/webpack": "^4.4.9",
@@ -53,6 +57,7 @@
     "request": "^2.83.0",
     "request-promise": "^4.2.2",
     "rimraf": "^3.0.2",
+    "semver": "^7.3.2",
     "source-map-loader": "^0.2.3",
     "ts-node": "^7.0.1",
     "tslib": "^1.9.3",

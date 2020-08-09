@@ -1,22 +1,27 @@
 import { versions } from './versions';
-import {spawnSync} from 'child_process';
-import * as assert from 'assert';
 import { getStdout } from './util';
+import * as assert from 'assert';
 
 type Machine = Pick<NodeJS.Process, 'platform' | 'arch'>;
 
 export interface Version {
     version: string;
-    /** Output of `pwsh --version`, used to double-check that the ambient installed pwsh matches the expected version */
+    /**
+     * Output of `pwsh --version`, used to double-check that the ambient installed pwsh matches the expected version
+     * 
+     * TODO this is never used, and the values we have for this are actually all wrong.
+     * They have a `v` that shouldn't be there.
+     */
     versionOutput: string;
-    isPrerelease?: true;
+    isPrerelease: boolean;
     builds: ReadonlyArray<Readonly<Build>>;
 }
 
 export type Extension = '.tar.gz' | '.zip' | '.unknown';
+export type Arch = 'x64' | 'ia32' | 'arm' | 'arm64';
 
 export interface Build {
-    arch: 'x64' | 'ia32' | 'arm';
+    arch: Arch;
     platform: NodeJS.Platform;
     extension: Extension;
     url: string;
@@ -86,3 +91,8 @@ interface PSVersionTableVersion {
     MajorRevision: number;
     MinorRevision: number;
 }
+
+export const latestStableVersion = versions.find(v => !v.isPrerelease).version;
+export const latestIncludingPrereleaseVersion = versions[0].version;
+
+assert(latestStableVersion);

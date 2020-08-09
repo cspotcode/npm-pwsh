@@ -1,6 +1,6 @@
 {
   "name": "pwsh",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "Install PowerShell Core via npm, allowing you to use it in npm scripts and node projects.",
   "bin": {
     "pwsh": "./bin/pwsh"

@@ -18,7 +18,6 @@ param(
     [switch] $publishPackages,
     <# update CHANGELOG for next version #>
     [switch] $postPublish,
-    [string[]] $parseVersion,
     [switch] $dryrun,
     [string]$winPwsh
 )
@@ -177,44 +176,6 @@ function main {
         run { git push --tags }
 
     }
-
-    if($parseVersion) {
-        $ghHashes = $parseVersion
-        $versions = $ghHashes |
-        ? { $_ } |
-        % { $m = $false } {
-            $m = -not $m
-            if($m) {
-                $name = $_.trim()
-            } else {
-                $name -match 'PowerShell-(?<version>.*)-(?<platform>.*?)-(?<arch>.*?)(?<extension>\..*)'
-                [pscustomobject]@{
-                    # name = $name;
-                    # version = $Matches.version;
-                    platform = $Matches.platform;
-                    arch = $Matches.arch;
-                    extension = $Matches.extension;
-                    sha256 = $_.trim();
-                    url = "https://github.com/PowerShell/PowerShell/releases/download/v$( $Matches.version )/$name";
-                    bin = 'pwsh'
-                }
-            }
-        } |
-        ? {
-            try {
-                $_.platform -match 'win|osx|linux' -and $_.extension -match '\.tar\.gz|\.zip' -and $_.arch -match 'x86|x64'
-            } catch {$false}
-        } |
-        % {
-            $_.arch = @{ x64 = 'x64'; x86 = 'ia32'; }.($_.arch);
-            $_.platform = @{ osx = 'darwin'; win = 'win32'; linux = 'linux' }.($_.platform);
-            if($_.platform -eq 'win32') { $_.bin += '.exe' }
-            $_
-        }
-
-        $versions
-    }
-
 }
 
 function getPwshVersions {

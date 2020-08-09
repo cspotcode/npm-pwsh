@@ -13,7 +13,13 @@
 # fake powershell is preinstalled: true, false
 
 name: Continuous
-on: [pull_request]
+on:
+  # master branch
+  push:
+    branches:
+      - master
+  # pull requests
+  pull_request: {}
 
 jobs:
   testWindows:
